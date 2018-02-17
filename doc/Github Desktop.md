@@ -20,11 +20,11 @@
     2. Confirm that you are in the correct branch
     3. Add a **descriptive** summary, and an optional description detailing the changes made
     4. Click "Commit to [selected branch]"
-    5. "Push" changes to Github server with the button at the top right
+    5. "Push" changes to Github server with the "Push Origin" button at the top right
 4. Test your code thoroughly
 5. Once your changes are ready to push to the master branch, go to Branch > Update from Default Branch
 6. Resolve any merge conflicts that occur by manually updating the files in your branch
 7. Commit any merge conflict fixes to your local branch
 8. Repeat steps 4-7 until you merge the "default" branch into your branch without merge conflicts
 9. Create a pull request by going to Branch > Create Pull Request (this will redirect you to the github website, where you will fill out a form to create a request)
-10. Once Github confirms that the branches can be safely merged, you may do so
+10. Once Github confirms that the branches can be safely merged, you may do so, and close the branch (do not delete the branch once it is merged with master)
