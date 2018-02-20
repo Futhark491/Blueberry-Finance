@@ -6,7 +6,7 @@ import stdfn
 def validate_login_data(username,password):
     # Sanitize inputs
     # (note that this does NOT validate the usr/pwd combo)
-    if not stdfn.verify_input_sanitization(username):
+    if not stdfn.verify_input_sanitization(username,username):
         flash('Username is invalid')
         return False
     if not stdfn.verify_input_sanitization(password):
