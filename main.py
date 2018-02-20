@@ -1,6 +1,6 @@
 import os
 from flask import Flask, flash, render_template, request, session, redirect
-import stdfn
+import user_acct
 
 # Static variables
 APP_HOST = '127.0.0.1'
@@ -21,35 +21,8 @@ def home():
 # Processes login data
 @app.route('/login', methods=['POST'])
 def login():
-    # Get username/password from form
-    form_username = str(request.form['username']).lower()
-    form_password = str(request.form['password'])
 
-    # Flag to verify that logging in didn't fail at any point.
-    success = True
-
-    # Sanitize inputs (note that this does NOT validate the usr/pwd combo)
-    if not stdfn.sanitize_input(form_username):
-        success = False
-        flash('Username is invalid')
-    if not stdfn.sanitize_input(form_password):
-        success = False
-        flash('Password is invalid')
-
-    # Query database for validity
-    if success:
-        # TODO: check username and password against DB
-        #       If this check fails, flash an auth fail & change success
-        pass
-    else:
-        # Input wasn't sanitary, so just redirect back to home without validating.
-        return redirect('/')
-
-    # Create a data container to store session data
-    if success:
-        session['logged_in'] = True
-    else:
-        flash('Incorrect username or password.')
+    session['logged_in'] = user_acct.validate_login_data(request.form['username'],request.form['password'])
 
     return redirect('/')
 
@@ -62,7 +35,7 @@ def logout():
 
 # Run the flask application
 if __name__ == "__main__":
-    #debug code
+    #debug code for cookies
     app.secret_key = os.urandom(12)
     # run the application
     app.run(debug=True, host=APP_HOST, port=APP_PORT)
