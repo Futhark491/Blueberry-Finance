@@ -103,3 +103,6 @@ ENV/
 # SQLite
 *.db
 *.db-journal
+
+# pycharm
+.idea/
