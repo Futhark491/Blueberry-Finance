@@ -1,5 +1,5 @@
 from flask import flash
-import stdfn
+import modules.standard.stdfn as stdfn
 
 # Verify that the username & password are sanitary and is a valid
 # combination saved in the database

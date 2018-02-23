@@ -1,6 +1,6 @@
 import os
 from flask import Flask, flash, render_template, request, session, redirect
-import user_acct
+import modules.user_acct.user_acct as user_acct
 
 # Static variables
 APP_HOST = '127.0.0.1'
