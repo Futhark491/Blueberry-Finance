@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
-from sqlalchemy import sessionmaker
-import loginDb, catagoriesDb
+from sqlalchemy.orm import sessionmaker
+import modules.db.loginDb as loginDb
+import modules.db.catagoriesDb as categoriesDb
 
 #create the User database
 def load_user():
