@@ -1,6 +1,7 @@
 import os
 from flask import Flask, flash, render_template, request, session, redirect
 import modules.user_acct.user_acct as user_acct
+import modules.db.DbFunctions as DbFunctions
 
 # Static variables
 APP_HOST = '127.0.0.1'
@@ -8,6 +9,9 @@ APP_PORT = 5000
 
 # build the flask application
 app = Flask(__name__)
+
+# load up the usertable
+user_table = DbFunctions.load_user()
 
 # Main page
 @app.route('/')
@@ -22,7 +26,7 @@ def home():
 @app.route('/login', methods=['POST'])
 def login():
 
-    session['logged_in'] = user_acct.validate_login_data(request.form['username'],request.form['password'])
+    session['logged_in'] = user_acct.validate_login_data(request.form['username'],request.form['password'],user_table)
 
     # Set up the user data as needed
     if session['logged_in']:
