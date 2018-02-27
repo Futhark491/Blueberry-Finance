@@ -1,0 +1,9 @@
+{%  extends "baseLayout.html" %}
+{% block content %}
+    {% if session['logged_in'] %}
+        <p>Hello, <a href="#" class="user-session">{{ ['username'] }}</a>!</p>
+        <a href="/logout">Log out.</a>
+    {% else %}
+        <p>Generic Error!</p>
+    {% endif %}
+{% endblock %}
