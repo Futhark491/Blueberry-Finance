@@ -16,7 +16,7 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return '<h1>You are logged in.</h1><a href="/logout">Log out.</a>'
+        return render_template('main.html', username=session.get('user_data').get('username'))
 
 # Processes login data
 @app.route('/login', methods=['POST'])
@@ -24,12 +24,18 @@ def login():
 
     session['logged_in'] = user_acct.validate_login_data(request.form['username'],request.form['password'])
 
+    # Set up the user data as needed
+    if session['logged_in']:
+        session['user_data'] = {'username': request.form['username']}
+
     return redirect('/')
 
-# Forces users back to login screen
+# Forces users back to login screen & deletes stored data
 @app.route('/logout')
 def logout():
     session['logged_in'] = False
+
+    session['user_data'] = None
 
     return redirect('/')
 
