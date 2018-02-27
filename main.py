@@ -39,6 +39,20 @@ def logout():
 
     return redirect('/')
 
+# Send users to the registration page to make an account
+@app.route('/registration')
+def registration():
+    return render_template('register.html')
+
+# Pull data from the registration form and attempt to create a new user. Redirect to home (for logging in) if it succeeds.
+@app.route('/register', methods=['POST'])
+def register_action():
+
+    #TODO: Pull data from the form, sanitize it, and add it to the DB
+    flash('Your account was not created, as this functionality was not implemented yet.')
+
+    return redirect('/')
+
 # Run the flask application
 if __name__ == "__main__":
     #debug code for cookies
