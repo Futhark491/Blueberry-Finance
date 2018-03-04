@@ -1,8 +1,10 @@
+
+
 # Standard sanitation of a given input. If the input is not valid in any
 # way, return False. Otherwise, return True.
 # An optional input type value can be inserted as well, to get more
-# specific sanitization checks, including 'username'.
-def verify_input_sanitization(input_string,input_type='none'):
+# specific sanitization checks, including 'username' and 'password'.
+def verify_input_sanitization(input_string, input_type='none'):
     # GENERIC SANITATION
     # Nonetype
     if input_string is None:
@@ -16,5 +18,8 @@ def verify_input_sanitization(input_string,input_type='none'):
         # username too short / long
         if len(input_string) < 4 or len(input_string) > 16:
             return False
+    elif input_type == 'password':
+        pass
+
     # Input is sanitary
     return True
