@@ -19,7 +19,7 @@ def load_cat():
 #Returns False if fails and True if valid
 def validate_user(user_name, pass_word, user_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == user_name)
-    if query.count < 1:
+    if query.count() < 1:
         return False
 
     user = query.first()
@@ -33,11 +33,11 @@ def validate_user(user_name, pass_word, user_table):
 #Returns a dictionary of catagories and their values for the user
 def get_catagories(username, user_table, cat_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count < 1:
+    if query.count() < 1:
         return False
     user_id = query.first().id
     query = cat_table.query(catagoriesDb.Catagory).filter(catagoriesDb.Catagory.userId == user_id)
-    if query.count < 1:
+    if query.count() < 1:
         return False
 
     cats = {}
@@ -72,7 +72,7 @@ def add_user(username, password, user_table, cat_table, cats):
 #Otherwise deletes the user
 def remove_user(username, user_table):
     query =  user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count < 1:
+    if query.count() < 1:
         return False
     query.first().delete()
     user_table.session.commit()
@@ -82,12 +82,12 @@ def remove_user(username, user_table):
 #Otherwise deletes the desired catagory for the user
 def remove_cat(username, user_table, cat, cat_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count < 1:
+    if query.count() < 1:
         return False
     user_id = query.first().id
     query = cat_table.query(catagoriesDb.Catagory).filter(catagoriesDb.Catagory.userId == user_id).\
         filter(catagoriesDb.Catagory.catName == cat)
-    if query.count < 1:
+    if query.count() < 1:
         return False
     for result in query:
         result.delete()
@@ -98,12 +98,12 @@ def remove_cat(username, user_table, cat, cat_table):
 #Otherwise creates the new catagory for the user
 def add_cat(username, user_table, catname, catval, cat_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count < 1:
+    if query.count() < 1:
         return False
     user_id = query.first().id
     query = cat_table.query(catagoriesDb.Catagory).filter(catagoriesDb.Catagory.userId == user_id). \
         filter(catagoriesDb.Catagory.catName == catname)
-    if query.count > 0:
+    if query.count() > 0:
         return False
 
     new_cata = catagoriesDb.Catagory(user_id, catname, catval)
