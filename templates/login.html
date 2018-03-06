@@ -4,39 +4,38 @@
         <p>You're logged in already!</p>
     {% else %}
         <form action="/login" method="POST">
-            <div class="login">
-                <div class="login-screen">
-                    <div class="app-title">
-                        <h1>Login</h1>
-                    </div>
-
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <div class="flashes">
-                                {% for message in messages %}
-                                    <p>{{ message }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-
-                    <div class="login-form">
-                        <div class="control-group">
-                        <input type="text" class="login-field" value="" placeholder="username" name="username">
-                        <label class="login-field-icon fui-user" for="login-name"></label>
-                        </div>
-
-                        <div class="control-group">
-                        <input type="password" class="login-field" value="" placeholder="password" name="password">
-                        <label class="login-field-icon fui-lock" for="login-pass"></label>
-                        </div>
-
-                        <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" >
-                        <br>
-                    </div>
-                    <p><a href="/register">Register</a></p>
-                </div>
+            <div class="header">
+                <h1>Welcome to Blueberry Finance!</h1>
+                <h2>Login</h2>
+                <span>Please, fill this form</span>
             </div>
+
+            <div class="login-form">
+                <div class="control-group">
+                    <input type="text" class="login-field" value="" placeholder="username" name="username">
+                    <label class="login-field-icon fui-user" for="login-name"></label>
+                </div>
+
+                <div class="control-group">
+                    <input type="password" class="login-field" value="" placeholder="password" name="password">
+                    <label class="login-field-icon fui-lock" for="login-pass"></label>
+                </div>
+
+                <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block">
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <h2>Need a new account?</h2>
+            <h2><a href="/register">Register</a></h2>
         </form>
 
     {% endif %}
