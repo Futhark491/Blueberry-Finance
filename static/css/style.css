@@ -1,0 +1,16 @@
+body{
+	background-image:url("bb.jpg");
+}
+form{
+	margin: 100px 35%;
+	border: 1px solid;
+	padding: 10px;
+text-align:center;
+background-color:grey;
+}
+header{
+	text-align:center;
+	background-color: grey;
+	border: 1px solid;
+	margin: 0% 35%;
+}
