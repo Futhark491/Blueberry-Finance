@@ -1,9 +1,8 @@
 {%  extends "baseLayout.html" %}
 {% block content %}
     {% if session['logged_in'] %}
-        <p>Hello, <a href="#" class="user-session">{{ username }}</a>!</p>
-        <a href="/logout">Log out.</a>
+        <h2>Hello, {{ username }}!  <a href="/logout">Log out.</a> </h2>
     {% else %}
-        <p>Generic Error!</p>
+        <p>Not logged in!</p>
     {% endif %}
 {% endblock %}
