@@ -6,13 +6,14 @@ import modules.db.DbFunctions as DbFunctions
 # Static variables
 APP_HOST = '127.0.0.1'
 APP_PORT = 5000
-DEFAULT_USER_CATEGORIES = ['food', 'bills', 'personal', 'income']
+DEFAULT_USER_CATEGORIES = []
 
 # build the flask application
 app = Flask(__name__)
 
 # load up the usertable
 user_table = DbFunctions.load_user()
+category_table = DbFunctions.load_cat()
 
 
 # Main page

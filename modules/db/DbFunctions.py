@@ -36,7 +36,7 @@ def get_catagories(username, user_table, cat_table):
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(catagoriesDb.Catagory).filter(catagoriesDb.Catagory.userId == user_id)
+    query = cat_table.query(categoriesDb.Catagory).filter(categoriesDb.Catagory.userId == user_id)
     if query.count() < 1:
         return False
 
@@ -64,7 +64,7 @@ def add_user(username, password, user_table, cat_table, cats):
     result = query.first()
 
     for cat in cats:
-        new_cata = catagoriesDb.Catagory(result.id, cat, cats[cat])
+        new_cata = categoriesDb.Catagory(result.id, cat, cats[cat])
         cat_table.add(new_cata)
 
 #Pass the username and user database
@@ -85,8 +85,8 @@ def remove_cat(username, user_table, cat, cat_table):
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(catagoriesDb.Catagory).filter(catagoriesDb.Catagory.userId == user_id).\
-        filter(catagoriesDb.Catagory.catName == cat)
+    query = cat_table.query(categoriesDb.Catagory).filter(categoriesDb.Catagory.userId == user_id).\
+        filter(categoriesDb.Catagory.catName == cat)
     if query.count() < 1:
         return False
     for result in query:
@@ -101,10 +101,10 @@ def add_cat(username, user_table, catname, catval, cat_table):
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(catagoriesDb.Catagory).filter(catagoriesDb.Catagory.userId == user_id). \
-        filter(catagoriesDb.Catagory.catName == catname)
+    query = cat_table.query(categoriesDb.Catagory).filter(categoriesDb.Catagory.userId == user_id). \
+        filter(categoriesDb.Catagory.catName == catname)
     if query.count() > 0:
         return False
 
-    new_cata = catagoriesDb.Catagory(user_id, catname, catval)
+    new_cata = categoriesDb.Catagory(user_id, catname, catval)
     cat_table.add(new_cata)
