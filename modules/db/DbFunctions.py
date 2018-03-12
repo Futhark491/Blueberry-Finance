@@ -1,7 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import modules.db.loginDb as loginDb
-import modules.db.catagoriesDb as categoriesDb
+import modules.db.categoriesDb as categoriesDb
+import modules.db.transanctionsDb as tranDb
 
 #create the User database
 def load_user():
@@ -14,6 +15,11 @@ def load_cat():
     cat_engine = create_engine('sqlite:///cattable.db', echo = True)
     cat_session = sessionmaker(bind = cat_engine)
     return(cat_session())
+
+def load_tran():
+    tran_engine = create_engine('sqlite:///trantable.db', echo = True)
+    tran_session = sessionmaker(bind = tran_engine)
+    return (tran_session())
 
 #Pass the username, password and user database to validate the authenticity of the user logging in
 #Returns False if fails and True if valid
@@ -36,7 +42,7 @@ def get_catagories(username, user_table, cat_table):
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(categoriesDb.Catagory).filter(categoriesDb.Catagory.userId == user_id)
+    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
     if query.count() < 1:
         return False
 
@@ -64,7 +70,7 @@ def add_user(username, password, user_table, cat_table, cats):
     result = query.first()
 
     for cat in cats:
-        new_cata = categoriesDb.Catagory(result.id, cat, cats[cat])
+        new_cata = categoriesDb.Category(result.id, cat, cats[cat])
         cat_table.add(new_cata)
 
 #Pass the username and user database
@@ -85,8 +91,8 @@ def remove_cat(username, user_table, cat, cat_table):
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(categoriesDb.Catagory).filter(categoriesDb.Catagory.userId == user_id).\
-        filter(categoriesDb.Catagory.catName == cat)
+    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id).\
+        filter(categoriesDb.Category.catName == cat)
     if query.count() < 1:
         return False
     for result in query:
@@ -101,10 +107,33 @@ def add_cat(username, user_table, catname, catval, cat_table):
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(categoriesDb.Catagory).filter(categoriesDb.Catagory.userId == user_id). \
-        filter(categoriesDb.Catagory.catName == catname)
+    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id).\
+        filter(categoriesDb.Category.catName == catname)
     if query.count() > 0:
         return False
 
-    new_cata = categoriesDb.Catagory(user_id, catname, catval)
+    new_cata = categoriesDb.Category(user_id, catname, catval)
     cat_table.add(new_cata)
+
+def add_trans(username, user_table, tranname, tranval, trandesc, tran_table):
+    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+    if query.count() < 1:
+        return False
+    user_id = query.first().id
+    new_tran = tranDb.Transaction(user_id, tranname, tranval, trandesc)
+    tran_table.add(new_tran)
+
+def get_transactions(username, user_table, tran_table):
+    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+    if query.count() < 1:
+        return False
+    user_id = query.first().id
+    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
+    if query.count() < 1:
+        return False
+
+    tran = []
+    for row in query:
+        tran.append([row.tranName, row.tranVal, row.tranDesc])
+
+    return tran
