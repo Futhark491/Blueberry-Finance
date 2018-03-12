@@ -23,13 +23,21 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
+        #redirect('/main')
         return render_template('main.html', username=session.get('user_data').get('username'))
 
+
+@app.route('/main', methods=['POST'])
+def main():
+    description = request.form['transaction_description']
+    price = request.form['transaction_price']
+
+    #TODO add transaction details to database associated with current user
+    return render_template('main.html', username=session.get('user_data').get('username'))
 
 # Processes login data
 @app.route('/login', methods=['POST'])
 def login():
-
     session['logged_in'] = user_acct.validate_login_data(request.form['username'], request.form['password'], user_table)
 
     # Set up the user data as needed

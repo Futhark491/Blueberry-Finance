@@ -5,4 +5,12 @@
     {% else %}
         <p>Not logged in!</p>
     {% endif %}
+
+    <p>Enter transaction details.</p>
+    <form action="/main" method="POST">
+        Description: <input type="text" name="transaction_description"><br>
+        Price:       <input type="text" name="transaction_price"><br>
+        <button type="submit">Submit Transaction</button>
+    </form>
+
 {% endblock %}
