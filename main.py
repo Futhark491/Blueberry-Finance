@@ -23,17 +23,21 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        #redirect('/main')
         return render_template('main.html', username=session.get('user_data').get('username'))
 
 
-@app.route('/main', methods=['POST'])
+# Adds a transaction to the database
+@app.route('/add_transaction', methods=['POST'])
 def main():
     description = request.form['transaction_description']
-    price = request.form['transaction_price']
+    amount = request.form['transaction_amount']
+    date = request.form['transaction_date']
+    category = request.form['transaction_category']
 
-    #TODO add transaction details to database associated with current user
-    return render_template('main.html', username=session.get('user_data').get('username'))
+    # TODO: add transaction details to database associated with current user
+    print('\nData to pass to database:\n  Desc: {0}\n  Amnt: ${1}\n  Date: {2}\n  Cat: {3}\n'.format(description, amount, date, category))
+    return redirect('/')
+
 
 # Processes login data
 @app.route('/login', methods=['POST'])

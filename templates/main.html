@@ -7,9 +7,15 @@
     {% endif %}
 
     <p>Enter transaction details.</p>
-    <form action="/main" method="POST">
+    <form action="/add_transaction" method="POST">
         Description: <input type="text" name="transaction_description"><br>
-        Price:       <input type="text" name="transaction_price"><br>
+        Amount:       <input type="text" name="transaction_amount"><br>
+        Date : <input type="date" name="transaction_date"><br>
+        Category: <select name="transaction_category">
+            <option value="uncategorized">Uncategorizied</option>
+            <option value="food">Food</option>
+            <option value="auto">Auto</option>
+        </select>
         <button type="submit">Submit Transaction</button>
     </form>
 
