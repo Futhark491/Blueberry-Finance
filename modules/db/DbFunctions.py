@@ -6,18 +6,18 @@ import modules.db.transanctionsDb as tranDb
 
 #create the User database
 def load_user():
-    user_engine = create_engine('sqlite:///usertable.db', echo = True)
+    user_engine = create_engine('sqlite:///usertable.db', echo = False)
     user_session = sessionmaker(bind = user_engine)
     return(user_session())
 
 #create the catagory database
 def load_cat():
-    cat_engine = create_engine('sqlite:///cattable.db', echo = True)
+    cat_engine = create_engine('sqlite:///cattable.db', echo = False)
     cat_session = sessionmaker(bind = cat_engine)
     return(cat_session())
 
 def load_tran():
-    tran_engine = create_engine('sqlite:///trantable.db', echo = True)
+    tran_engine = create_engine('sqlite:///trantable.db', echo = False)
     tran_session = sessionmaker(bind = tran_engine)
     return (tran_session())
 
@@ -73,6 +73,9 @@ def add_user(username, password, user_table, cat_table, cats):
         new_cata = categoriesDb.Category(result.id, cat, cats[cat])
         cat_table.add(new_cata)
 
+    user_table.commit()
+    cat_table.commit()
+
 #Pass the username and user database
 #Returns False if the user does not exist
 #Otherwise deletes the user
@@ -81,7 +84,7 @@ def remove_user(username, user_table):
     if query.count() < 1:
         return False
     query.first().delete()
-    user_table.session.commit()
+    user_table.commit()
 
 #Pass the username, user and catagory databases, and the catagory to be deleted
 #Returns False if the user or their catagory does not exist
@@ -97,7 +100,7 @@ def remove_cat(username, user_table, cat, cat_table):
         return False
     for result in query:
         result.delete()
-    cat_table.session.commit()
+    cat_table.commit()
 
 #Pass the username, catagory name and value, and the user and catagory databases
 #Returns False if the user does not exist or if the Catagory already exists
@@ -114,14 +117,16 @@ def add_cat(username, user_table, catname, catval, cat_table):
 
     new_cata = categoriesDb.Category(user_id, catname, catval)
     cat_table.add(new_cata)
+    cat_table.commit()
 
-def add_trans(username, user_table, tranname, tranval, trandesc, tran_table):
+def add_trans(username, user_table, tranname, tranval, trandesc, trandate, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
         return False
     user_id = query.first().id
-    new_tran = tranDb.Transaction(user_id, tranname, tranval, trandesc)
+    new_tran = tranDb.Transaction(user_id, tranname, tranval, trandesc, trandate)
     tran_table.add(new_tran)
+    tran_table.commit()
 
 def get_transactions(username, user_table, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
@@ -134,6 +139,6 @@ def get_transactions(username, user_table, tran_table):
 
     tran = []
     for row in query:
-        tran.append([row.tranName, row.tranVal, row.tranDesc])
+        tran.append([row.tranName, row.tranVal, row.tranDesc, row.tranDate])
 
     return tran
