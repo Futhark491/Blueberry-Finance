@@ -1,7 +1,9 @@
 import os
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
+import re
+
 
 # Static variables
 APP_HOST = '127.0.0.1'
@@ -30,8 +32,6 @@ def home_page():
         category_dict = DbFunctions.get_catagories(username, user_table, category_table)
         transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
 
-        print(category_dict)
-
         return render_template('main.html', username=username, category_dict=category_dict, transaction_list=transaction_list)
 
 
@@ -44,13 +44,12 @@ def add_transaction_action():
     date = request.form['transaction_date']
     category = request.form['transaction_category']
 
-    # TODO: sanitize inputs
+    print("\n\n" + category + "\n\n")
 
-    # Add transaction to database
-    DbFunctions.add_trans(username, user_table, category, amount, description, date, transaction_table)
-
-    # FIXME: remove once transactions are displayed on the dashboard
-    print(DbFunctions.get_transactions(username, user_table, transaction_table))
+    # Sanitize inputs
+    if validate_transaction_data(description, amount, date, category):
+        # Add transaction to database
+        DbFunctions.add_trans(username, user_table, category, amount, description, date, transaction_table)
 
     return redirect('/')
 
@@ -94,6 +93,24 @@ def register_action():
         return redirect('/')
     else:
         return redirect('/registration')
+
+
+# Validates all data from transactions. Returns False if the data validation failed and True otherwise
+def validate_transaction_data(description, amount, date, category):
+    moneyStringRegex = "-?[0-9]+(\.[0-9][0-9])?"
+    dateStringRegex = "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
+
+    if description == '' or amount == '' or date == '' or category == '':
+        flash('Fields cannot be left blank')
+        return False
+    elif not re.fullmatch(moneyStringRegex, amount):
+        flash("Invalid Amount. Please resubmit.")
+        return False
+    elif not re.fullmatch(dateStringRegex, date):
+        flash("Invalid Date. Please resubmit.")
+        return False
+
+    return True
 
 
 # Run the flask application
