@@ -31,11 +31,11 @@ def validate_registration_data(username, password, user_table, category_table, d
     if not stdfn.verify_input_sanitization(password, 'password'):
         flash('Password must not be empty')
         return False
-
-    # TODO: Check to see if user is in DB already
-
+        
     # Add username and password to the database
-    DbFunctions.add_user(username.lower(), password, user_table, category_table, default_categories)
+    if not DbFunctions.add_user(username.lower(), password, user_table, category_table, default_categories):
+        flash('Username is already in the database.')
+        return False
 
     flash('Your account was created successfully.')
     return True

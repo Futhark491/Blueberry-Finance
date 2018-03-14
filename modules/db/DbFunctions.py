@@ -76,6 +76,8 @@ def add_user(username, password, user_table, cat_table, cats):
     user_table.commit()
     cat_table.commit()
 
+    return True
+
 #Pass the username and user database
 #Returns False if the user does not exist
 #Otherwise deletes the user
@@ -131,11 +133,11 @@ def add_trans(username, user_table, tranname, tranval, trandesc, trandate, tran_
 def get_transactions(username, user_table, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
-        return False
+        return []
     user_id = query.first().id
     query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
     if query.count() < 1:
-        return False
+        return []
 
     tran = []
     for row in query:

@@ -6,42 +6,58 @@ import modules.db.DbFunctions as DbFunctions
 # Static variables
 APP_HOST = '127.0.0.1'
 APP_PORT = 5000
-DEFAULT_USER_CATEGORIES = []
+DEFAULT_USER_CATEGORIES = {'Food': 25, 'Car': 50, 'Personal': 25}
 
 # build the flask application
 app = Flask(__name__)
 
-# load up the usertable
+# load up the database tables
 user_table = DbFunctions.load_user()
 category_table = DbFunctions.load_cat()
+transaction_table = DbFunctions.load_tran()
 
 
 # Main page
 @app.route('/')
-def home():
+def home_page():
     # Validate user log in
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return render_template('main.html', username=session.get('user_data').get('username'))
+        username = session.get('user_data').get('username')
+
+        # Get default categories from the user and add them to the transaction selection list for adding transactions
+        category_dict = DbFunctions.get_catagories(username, user_table, category_table)
+        transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
+
+        print(category_dict)
+
+        return render_template('main.html', username=username, category_dict=category_dict, transaction_list=transaction_list)
 
 
 # Adds a transaction to the database
 @app.route('/add_transaction', methods=['POST'])
-def main():
+def add_transaction_action():
+    username = session.get('user_data').get('username')
     description = request.form['transaction_description']
     amount = request.form['transaction_amount']
     date = request.form['transaction_date']
     category = request.form['transaction_category']
 
-    # TODO: add transaction details to database associated with current user
-    print('\nData to pass to database:\n  Desc: {0}\n  Amnt: ${1}\n  Date: {2}\n  Cat: {3}\n'.format(description, amount, date, category))
+    # TODO: sanitize inputs
+
+    # Add transaction to database
+    DbFunctions.add_trans(username, user_table, category, amount, description, date, transaction_table)
+
+    # FIXME: remove once transactions are displayed on the dashboard
+    print(DbFunctions.get_transactions(username, user_table, transaction_table))
+
     return redirect('/')
 
 
 # Processes login data
 @app.route('/login', methods=['POST'])
-def login():
+def login_action():
     session['logged_in'] = user_acct.validate_login_data(request.form['username'], request.form['password'], user_table)
 
     # Set up the user data as needed
@@ -53,7 +69,7 @@ def login():
 
 # Forces users back to login screen & deletes stored data
 @app.route('/logout')
-def logout():
+def logout_action():
     session['logged_in'] = False
 
     session['user_data'] = None
@@ -63,7 +79,7 @@ def logout():
 
 # Send users to the registration page to make an account
 @app.route('/registration')
-def registration():
+def registration_page():
     return render_template('register.html')
 
 
@@ -71,7 +87,7 @@ def registration():
 @app.route('/register', methods=['POST'])
 def register_action():
 
-    # TODO: Pull data from the form, sanitize it, and add it to the DB
+    # Pull data from the form, sanitize it, and add it to the DB
     successful_registration = user_acct.validate_registration_data(request.form['username'], request.form['password'], user_table, category_table, DEFAULT_USER_CATEGORIES)
 
     if successful_registration:
