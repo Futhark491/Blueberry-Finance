@@ -54,6 +54,18 @@ def add_transaction_action():
     return redirect('/')
 
 
+# Removes the transaction with a given ID (note that this uses the URL query '?id=XXX')
+@app.route('/remove_transaction')
+def remove_transaction_action():
+    username = session.get('user_data').get('username')
+    transaction_id = request.args.get('id')
+
+    # TODO: verify that the user owns the transaction and remove it
+    print("\n\nTransaction to remove: {0}".format(transaction_id))
+
+    return redirect('/')
+
+
 # Processes login data
 @app.route('/login', methods=['POST'])
 def login_action():
