@@ -44,8 +44,6 @@ def add_transaction_action():
     date = request.form['transaction_date']
     category = request.form['transaction_category']
 
-    print("\n\n" + category + "\n\n")
-
     # Sanitize inputs
     if validate_transaction_data(description, amount, date, category):
         # Add transaction to database
@@ -60,8 +58,52 @@ def remove_transaction_action():
     username = session.get('user_data').get('username')
     transaction_id = request.args.get('id')
 
-    # TODO: verify that the user owns the transaction and remove it
-    print("\n\nTransaction to remove: {0}".format(transaction_id))
+    # TODO: verify that the user owns the transaction and remove it (code below is temporary, using the description as the ID)
+    transactionList = DbFunctions.get_transactions(username, user_table, transaction_table)
+    for transactionData in transactionList:
+        if transactionData[2] == transaction_id:
+            print('\n\nTransaction to remove: {0}'.format(transaction_id))
+            flash('Your transaction was removed.')
+            return redirect('/')
+
+    # Transaction not found/ not owned by the user
+    flash('There was an error removing the transaction.')
+
+    return redirect('/')
+
+
+# Redirects the user to a form page to edit the transaction data, or back to the dashboard if no transactions were found
+@app.route('/edit_transaction')
+def edit_transaction_page():
+    username = session.get('user_data').get('username')
+    transaction_id = request.args.get('id')
+
+    # TODO: Get the transaction from the database if the user owns it (code below is temporary, using the description as the ID)
+    transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
+    for transaction_data in transaction_list:
+        if transaction_data[2] == transaction_id:
+            category_dict = DbFunctions.get_catagories(username, user_table, category_table)
+            return render_template('transactionEditor.html', category_dict=category_dict, transaction_data=transaction_data)
+    
+    # Transaction not found/ not owned by the user
+    flash('There was an error editing the transaction.')
+    return redirect('/')
+
+
+# Saves the edits to the server and redirects the user back to the dashboard
+@app.route('/commit_transaction_edits', methods=['POST'])
+def edit_transaction_action():
+    username = session.get('user_data').get('username')
+    description = request.form['transaction_description']
+    amount = request.form['transaction_amount']
+    date = request.form['transaction_date']
+    category = request.form['transaction_category']
+
+    # Sanitize inputs
+    if validate_transaction_data(description, amount, date, category):
+        # TODO: edit transaction in the database
+        print('\n\nData Updated:\n Description: {0}\n Amount: {1}\n Date: {2}\n Category: {3}\n\n'.format(description, amount, date, category))
+        flash('Your transaction has been updated.')
 
     return redirect('/')
 
@@ -78,7 +120,7 @@ def login_action():
     return redirect('/')
 
 
-# Forces users back to login screen & deletes stored data
+# Forces users back to login screen & deletes stored session data
 @app.route('/logout')
 def logout_action():
     session['logged_in'] = False
