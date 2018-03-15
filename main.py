@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
-import re
+import modules.transactions.transactions as ta
 
 
 # Static variables
@@ -45,7 +45,7 @@ def add_transaction_action():
     category = request.form['transaction_category']
 
     # Sanitize inputs
-    if validate_transaction_data(description, amount, date, category):
+    if ta.validate_transaction_data(description, amount, date, category):
         # Add transaction to database
         DbFunctions.add_trans(username, user_table, category, amount, description, date, transaction_table)
 
@@ -59,9 +59,9 @@ def remove_transaction_action():
     transaction_id = request.args.get('id')
 
     # TODO: verify that the user owns the transaction and remove it (code below is temporary, using the description as the ID)
-    transactionList = DbFunctions.get_transactions(username, user_table, transaction_table)
-    for transactionData in transactionList:
-        if transactionData[2] == transaction_id:
+    transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
+    for transaction_data in transaction_list:
+        if transaction_data[2] == transaction_id:
             print('\n\nTransaction to remove: {0}'.format(transaction_id))
             flash('Your transaction was removed.')
             return redirect('/')
@@ -100,7 +100,7 @@ def edit_transaction_action():
     category = request.form['transaction_category']
 
     # Sanitize inputs
-    if validate_transaction_data(description, amount, date, category):
+    if ta.validate_transaction_data(description, amount, date, category):
         # TODO: edit transaction in the database
         print('\n\nData Updated:\n Description: {0}\n Amount: {1}\n Date: {2}\n Category: {3}\n\n'.format(description, amount, date, category))
         flash('Your transaction has been updated.')
@@ -147,24 +147,6 @@ def register_action():
         return redirect('/')
     else:
         return redirect('/registration')
-
-
-# Validates all data from transactions. Returns False if the data validation failed and True otherwise
-def validate_transaction_data(description, amount, date, category):
-    moneyStringRegex = "-?[0-9]+(\.[0-9][0-9])?"
-    dateStringRegex = "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
-
-    if description == '' or amount == '' or date == '' or category == '':
-        flash('Fields cannot be left blank')
-        return False
-    elif not re.fullmatch(moneyStringRegex, amount):
-        flash("Invalid Amount. Please resubmit.")
-        return False
-    elif not re.fullmatch(dateStringRegex, date):
-        flash("Invalid Date. Please resubmit.")
-        return False
-
-    return True
 
 
 # Run the flask application
