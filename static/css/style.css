@@ -11,14 +11,20 @@
         outline: none;
     }
 
-html, body {
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+body {
     background-color: #3498DB;
     font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
     height: 100%;
-    width: 100%;
+    width: 80%;
     text-align: center;
     color: #404040;
     position: relative;
+    margin: auto;
 }
 
 a {
@@ -28,6 +34,30 @@ a {
     transition: all 0.3s ease;
 }
 
+/* Base template header */
+ul {
+    border-radius: 3px;
+}
+    ul li {
+        float: left;
+    }
+
+        ul li h2 {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            height: 100%;
+        }
+
+    ul li a {
+        text-decoration: none;
+        color: white;
+    }
+
+#logout:hover {
+    background-color: #34DBCA;
+}
 
 /* MAIN PAGE */
 .wrapper {
@@ -135,10 +165,16 @@ header {
 
 .login-form {
     text-align: center;
+    padding-top: 20px;
+    width: 80%;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
 }
 
 .control-group {
-    margin-bottom: 10px;
+    width: 70%;
+    margin: auto auto 10px;
 }
 
 .flashes {
@@ -194,4 +230,27 @@ input {
     color: #444;
     display: block;
     margin-top: 12px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3445DB;
+}
+
+
+.main-content {
+    display: block;
+
+}
+
+.transaction-window {
+    height: 500px;
+    margin: auto;
+    border-radius: 8px;
+    overflow: scroll;
+    background: lightgray;
+    border-style: solid;
 }
