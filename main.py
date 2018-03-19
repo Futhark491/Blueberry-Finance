@@ -29,7 +29,7 @@ def home_page():
         username = session.get('user_data').get('username')
 
         # Get default categories from the user and add them to the transaction selection list for adding transactions
-        category_dict = DbFunctions.get_catagories(username, user_table, category_table)
+        category_dict = DbFunctions.get_categories(username, user_table, category_table)
         transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
 
         return render_template('main.html', username=username, category_dict=category_dict, transaction_list=transaction_list)

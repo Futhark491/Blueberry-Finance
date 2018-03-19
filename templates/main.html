@@ -4,9 +4,34 @@
 
     <div class="main-content">
         Hello world!
-        <div class="transaction-window">
+        <!--<div class="transaction-window"> -->
 
-        </div>
+            <table border ="0" cellpadding = "0" width = "100%" class="scrollTable">
+                <thead class ="fixedHeader">
+                    <tr>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                 </tr>
+             </thead>
+                <tbody>
+                    {% if transaction_list > [] %}
+                    {% for trans in transaction_list %}
+                    <tr>
+                        <th>{{trans[1]}}</th>
+                        <th>{{trans[2]}}</th>
+                        <th>{{trans[3]}}</th>
+                        <th>{{trans[4]}}</th>
+                    </tr>
+                    </tr>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+            </tbody>
+
+            </table>
+    <!--    </div> -->
         <p>Enter transaction details.</p>
         <form action="/add_transaction" method="POST">
             Description: <input type="text" name="transaction_description"><br>
