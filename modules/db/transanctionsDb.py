@@ -11,14 +11,14 @@ class Transaction(Base):
 
     id = Column(Integer, primary_key = True)
     userId = Column(Integer, nullable = False)
-    tranName = Column(String, nullable = False)
+    tranCat = Column(String, nullable = False)
     tranVal = Column(Integer, nullable = False)
     tranDesc = Column(String, nullable = True)
     tranDate = Column(String, nullable = False)
 
-    def __init__(self, user, name, val, desc, date):
+    def __init__(self, user, cat, val, desc, date):
         self.userId = user
-        self.tranName = name
+        self.tranCat = cat
         self.tranVal = val
         self.tranDesc = desc
         self.tranDate = date

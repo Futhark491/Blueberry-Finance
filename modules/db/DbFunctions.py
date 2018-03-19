@@ -37,7 +37,7 @@ def validate_user(user_name, pass_word, user_table):
 #Pass the username, user database and catagory database
 #Returns false if the user does not exist or if they have no catagories
 #Returns a dictionary of catagories and their values for the user
-def get_catagories(username, user_table, cat_table):
+def get_categories(username, user_table, cat_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
         return False
@@ -46,9 +46,9 @@ def get_catagories(username, user_table, cat_table):
     if query.count() < 1:
         return False
 
-    cats = {}
+    cats = []
     for row in query:
-        cats[row.catName] = row.catVal
+        cats.append([row.id, row.catName, row.catVal])
 
     return cats
 
@@ -76,32 +76,18 @@ def add_user(username, password, user_table, cat_table, cats):
     user_table.commit()
     cat_table.commit()
 
-    return True
-
 #Pass the username and user database
 #Returns False if the user does not exist
 #Otherwise deletes the user
 def remove_user(username, user_table):
-    query =  user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count() < 1:
-        return False
-    query.first().delete()
+    user_table.query(loginDb.User).filter(loginDb.User.username == username).delete()
     user_table.commit()
 
 #Pass the username, user and catagory databases, and the catagory to be deleted
 #Returns False if the user or their catagory does not exist
 #Otherwise deletes the desired catagory for the user
-def remove_cat(username, user_table, cat, cat_table):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count() < 1:
-        return False
-    user_id = query.first().id
-    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id).\
-        filter(categoriesDb.Category.catName == cat)
-    if query.count() < 1:
-        return False
-    for result in query:
-        result.delete()
+def remove_cat(catid, cat_table):
+    cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid).delete()
     cat_table.commit()
 
 #Pass the username, catagory name and value, and the user and catagory databases
@@ -121,26 +107,50 @@ def add_cat(username, user_table, catname, catval, cat_table):
     cat_table.add(new_cata)
     cat_table.commit()
 
-def add_trans(username, user_table, tranname, tranval, trandesc, trandate, tran_table):
+def edit_cat(catid, catname, catval, cat_table):
+    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid)
+    if query.count() < 1:
+        return False
+    for row in query:
+        row.catName = catname
+        row.catVal = catval
+    cat_table.commit()
+
+def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
         return False
     user_id = query.first().id
-    new_tran = tranDb.Transaction(user_id, tranname, tranval, trandesc, trandate)
+    new_tran = tranDb.Transaction(user_id, trancat, tranval, trandesc, trandate)
     tran_table.add(new_tran)
     tran_table.commit()
 
 def get_transactions(username, user_table, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
-        return []
+        return False
     user_id = query.first().id
     query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
     if query.count() < 1:
-        return []
+        return False
 
     tran = []
     for row in query:
-        tran.append([row.tranName, row.tranVal, row.tranDesc, row.tranDate])
+        tran.append([row.id, row.tranCat, row.tranVal, row.tranDesc, row.tranDate])
 
     return tran
+
+def edit_trans(tranid, trancat, tranval, trandesc, trandate, tran_table):
+    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.id == tranid)
+    if query.count() < 1:
+        return False
+    for row in query:
+        row.tranCat = trancat
+        row.tranVal = tranval
+        row.tranDesc = trandesc
+        row.tranDate = trandate
+    tran_table.commit()
+
+def remove_trans(tranid, tran_table):
+    tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.id == tranid).delete()
+    tran_table.commit()
