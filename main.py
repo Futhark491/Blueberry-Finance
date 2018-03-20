@@ -29,10 +29,10 @@ def home_page():
         username = session.get('user_data').get('username')
 
         # Get default categories from the user and add them to the transaction selection list for adding transactions
-        category_dict = DbFunctions.get_categories(username, user_table, category_table)
+        category_list = DbFunctions.get_categories(username, user_table, category_table)
         transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
 
-        return render_template('main.html', username=username, category_dict=category_dict, transaction_list=transaction_list)
+        return render_template('main.html', username=username, category_list=category_list, transaction_list=transaction_list)
 
 
 # Adds a transaction to the database
@@ -58,11 +58,11 @@ def remove_transaction_action():
     username = session.get('user_data').get('username')
     transaction_id = request.args.get('id')
 
-    # TODO: verify that the user owns the transaction and remove it (code below is temporary, using the description as the ID)
+    # Verify that the user owns the transaction and remove it
     transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
     for transaction_data in transaction_list:
-        if transaction_data[2] == transaction_id:
-            print('\n\nTransaction to remove: {0}'.format(transaction_id))
+        if transaction_data[0] == transaction_id:
+            DbFunctions.remove_trans(transaction_id)
             flash('Your transaction was removed.')
             return redirect('/')
 
@@ -78,10 +78,10 @@ def edit_transaction_page():
     username = session.get('user_data').get('username')
     transaction_id = request.args.get('id')
 
-    # TODO: Get the transaction from the database if the user owns it (code below is temporary, using the description as the ID)
+    # Get the transaction from the database if the user owns it (code below is temporary, using the description as the ID)
     transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
     for transaction_data in transaction_list:
-        if transaction_data[2] == transaction_id:
+        if transaction_data[0] == transaction_id:
             category_dict = DbFunctions.get_catagories(username, user_table, category_table)
             return render_template('transactionEditor.html', category_dict=category_dict, transaction_data=transaction_data)
     
@@ -94,6 +94,7 @@ def edit_transaction_page():
 @app.route('/commit_transaction_edits', methods=['POST'])
 def edit_transaction_action():
     username = session.get('user_data').get('username')
+    db_id = request.args.get('id')
     description = request.form['transaction_description']
     amount = request.form['transaction_amount']
     date = request.form['transaction_date']
@@ -101,8 +102,7 @@ def edit_transaction_action():
 
     # Sanitize inputs
     if ta.validate_transaction_data(description, amount, date, category):
-        # TODO: edit transaction in the database
-        print('\n\nData Updated:\n Description: {0}\n Amount: {1}\n Date: {2}\n Category: {3}\n\n'.format(description, amount, date, category))
+        DbFunctions.edit_trans(db_id, category, amount, description, date)
         flash('Your transaction has been updated.')
 
     return redirect('/')

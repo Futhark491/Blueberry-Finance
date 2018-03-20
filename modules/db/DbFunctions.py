@@ -40,11 +40,11 @@ def validate_user(user_name, pass_word, user_table):
 def get_categories(username, user_table, cat_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
-        return False
+        return []
     user_id = query.first().id
     query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
     if query.count() < 1:
-        return False
+        return []
 
     cats = []
     for row in query:
@@ -75,6 +75,7 @@ def add_user(username, password, user_table, cat_table, cats):
 
     user_table.commit()
     cat_table.commit()
+    return True
 
 #Pass the username and user database
 #Returns False if the user does not exist
@@ -106,6 +107,7 @@ def add_cat(username, user_table, catname, catval, cat_table):
     new_cata = categoriesDb.Category(user_id, catname, catval)
     cat_table.add(new_cata)
     cat_table.commit()
+    return True
 
 def edit_cat(catid, catname, catval, cat_table):
     query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid)
@@ -115,6 +117,7 @@ def edit_cat(catid, catname, catval, cat_table):
         row.catName = catname
         row.catVal = catval
     cat_table.commit()
+    return True
 
 def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
@@ -124,15 +127,16 @@ def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_t
     new_tran = tranDb.Transaction(user_id, trancat, tranval, trandesc, trandate)
     tran_table.add(new_tran)
     tran_table.commit()
+    return True
 
 def get_transactions(username, user_table, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
-        return False
+        return []
     user_id = query.first().id
     query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
     if query.count() < 1:
-        return False
+        return []
 
     tran = []
     for row in query:
@@ -150,6 +154,7 @@ def edit_trans(tranid, trancat, tranval, trandesc, trandate, tran_table):
         row.tranDesc = trandesc
         row.tranDate = trandate
     tran_table.commit()
+    return True
 
 def remove_trans(tranid, tran_table):
     tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.id == tranid).delete()
