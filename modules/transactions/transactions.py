@@ -13,10 +13,10 @@ def validate_transaction_data(description, amount, date, category):
     if not stdfn.verify_input_sanitization(description):
         flash('Invalid description. Please resubmit.')
         succeeded = False
-    if not (stdfn.verify_input_sanitization(amount) or re.fullmatch(moneyStringRegex, amount)):
+    if not (stdfn.verify_input_sanitization(amount) and re.fullmatch(moneyStringRegex, amount)):
         flash("Invalid amount. Please resubmit.")
         succeeded = False
-    if not (stdfn.verify_input_sanitization(date) or re.fullmatch(dateStringRegex, date)):
+    if not (stdfn.verify_input_sanitization(date) and re.fullmatch(dateStringRegex, date)):
         flash("Invalid date. Please resubmit.")
         succeeded = False
     if not stdfn.verify_input_sanitization(category):
