@@ -82,7 +82,7 @@ def edit_transaction_page():
     for transaction_data in transaction_list:
         if transaction_data[0] == transaction_id:
             category_list = DbFunctions.get_categories(username, user_table, category_table)
-            return render_template('transactionEditor.html', category_list=category_list, transaction_data=transaction_data)
+            return render_template('transactionEditor.html', username=username, category_list=category_list, transaction_data=transaction_data)
     
     # Transaction not found/ not owned by the user
     flash('There was an error editing the transaction.')
@@ -93,16 +93,22 @@ def edit_transaction_page():
 @app.route('/commit_transaction_edits', methods=['POST'])
 def edit_transaction_action():
     username = session.get('user_data').get('username')
-    db_id = request.args.get('id')
+    db_id = int(request.args.get('id'))
     description = request.form['transaction_description']
     amount = request.form['transaction_amount']
     date = request.form['transaction_date']
     category = request.form['transaction_category']
 
+    succeed = False
+
     # Sanitize inputs
     if ta.validate_transaction_data(description, amount, date, category):
-        DbFunctions.edit_trans(db_id, category, amount, description, date)
-        flash('Your transaction has been updated.')
+        if DbFunctions.edit_trans(db_id, category, amount, description, date, transaction_table):
+            succeed = True
+            flash('Your transaction has been updated.')
+
+    if not succeed:
+        flash('Your transaction could not be updated.')
 
     return redirect('/')
 
