@@ -143,6 +143,15 @@ input {
         background-color: #2980B9;
     }
 
+.cancel {
+    background-color: #FF0000;
+
+}
+
+    .cancel:hover {
+        background-color: #DC0202;
+    }
+
 .login-link {
     font-size: 12px;
     color: #444;
@@ -203,12 +212,27 @@ ul {
     height: 40px;
 }
 
+.edit-transaction-window {
+    width: 70%;
+    margin: auto;
+}
 .edit-transaction-form {
     border-radius: 8px;
     border-style: solid;
-    margin: auto;
+    margin: 15px auto;
+    padding: 10px;
     background-color: white;
     width: 70%;
-    height: 400px;
 }
 
+.edit-transaction-form p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.edit-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+}
