@@ -8,9 +8,14 @@
                 <p>Description: </p><input type="text" name="transaction_description" value="{{ transaction_data[3] }}">
                 <p>Amount: </p><input type="text" name="transaction_amount" value="{{ transaction_data[2] }}">
                 <p>Date: </p><input type="date" name="transaction_date" value="{{ transaction_data[4] }}">
-                <p>Category: </p><input type="text" name="transaction_category" value="{{ transaction_data[1] }}">
+                <p>Category: </p><p><select name = "transaction_category">
+                        {% for category in category_list %}
+                        <option value="{{category[1]}}">{{category[1]}}</option>
+                        {% endfor %}
+                     </select>
+                </p>
                 <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
-                <input type="submit" value="Confirm Changes" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">
+               <input type="submit" value="Confirm Changes" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">
             </form>
         </div>
     </div>

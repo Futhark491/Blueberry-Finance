@@ -47,7 +47,13 @@
                     <p>Description: </p><input type="text" name="transaction_description">
                     <p>Amount: </p><input type="text" name="transaction_amount">
                     <p>Date: </p><input type="date" name="transaction_date">
-                    <p>Category: </p><input type="text" name="transaction_category">
+                    Category: 
+                    <select name = "transaction_category">
+                        {% for category in category_list %}
+                        <option value="{{category[1]}}">{{category[1]}}</option>
+                        {% endfor %}
+                     </select>
+                
                     <input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height: auto">
                 </form>
             </div>
