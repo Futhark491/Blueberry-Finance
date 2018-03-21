@@ -81,7 +81,7 @@ def edit_transaction_page():
     transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
     for transaction_data in transaction_list:
         if transaction_data[0] == transaction_id:
-            category_list = DbFunctions.get_catagories(username, user_table, category_table)
+            category_list = DbFunctions.get_categories(username, user_table, category_table)
             return render_template('transactionEditor.html', category_list=category_list, transaction_data=transaction_data)
     
     # Transaction not found/ not owned by the user
