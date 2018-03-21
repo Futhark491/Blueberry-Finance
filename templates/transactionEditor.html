@@ -4,7 +4,7 @@
         <h1 style="margin-top:5px">Transaction Editor</h1>
         <div class="edit-transaction-form">
             <h2>Add Transaction</h2>
-            <form action="/commit_transaction_edits" method="POST">
+            <form action="/commit_transaction_edits?id={{ transaction_data[0] }}" method="POST">
                 <p>Description: </p><input type="text" name="transaction_description" value="{{ transaction_data[3] }}">
                 <p>Amount: </p><input type="text" name="transaction_amount" value="{{ transaction_data[2] }}">
                 <p>Date: </p><input type="date" name="transaction_date" value="{{ transaction_data[4] }}">
