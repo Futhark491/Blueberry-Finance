@@ -1,0 +1,16 @@
+{% extends "baseLayout.html" %}
+{%  block content %}
+    <div class="edit-transaction-window">
+        <h2>Transaction Editor</h2>
+        <div class="edit-transaction-form">
+            <h2>Add Transaction</h2>
+            <form action="/commit_transaction_edits" method="POST">
+                <p>Description: </p><input type="text" name="transaction_description" placeholder="{{ transaction_data[2] }}">
+                <p>Amount: </p><input type="text" name="transaction_amount" placeholder="{{ transaction_data[3] }}">
+                <p>Date: </p><input type="date" name="transaction_date" placeholder="{{ transaction_data[1] }}">
+                <p>Category: </p><input type="text" name="transaction_category" placeholder="{{ transaction_data[4] }}">
+                <input type="submit" value="Confirm Changes" class="btn btn-primary btn-large btn-block" style="height: auto">
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,55 +1,57 @@
 {%  extends "baseLayout.html" %}
 {% block content %}
 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flashes">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     <div class="main-content">
-        Hello world!
-        <!--<div class="transaction-window"> -->
+        <div class="transaction-window">
+            <table class="scrollTable">
+{#                <thead class ="fixedHeader">#}
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Category</th>
+                    </tr>
+{#                </thead>#}
 
-            <table border ="0" cellpadding = "0" width = "100%" class="scrollTable">
-                <thead class ="fixedHeader">
-                    <tr>
-                    <th>ID</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                    <th>Edit</th>
-                 </tr>
-             </thead>
-                <tbody>
-                    <!--{% if transaction_list > [] %}-->
+{#                <tbody>#}
+                    {% if transaction_list > [] %}
                     {% for trans in transaction_list %}
-                    <tr>
-                        <th>{{trans[0]}}</th>
-                        <th>{{trans[1]}}</th>
-                        <th>{{trans[3]}}</th>
-                        <th>{{trans[2]}}</th>
-                        <th>{{trans[4]}}</th>
-                        <th><button>edit</button></th>
+                    <tr class="transaction">
+                        <td>{{trans[4]}}</td>
+                        <td>{{trans[3]}}</td>
+                        <td>{{trans[2]}}</td>
+                        <td>{{trans[1]}}</td>
+                        <td><a href="edit_transaction?id={{ trans[0] }}"><h4>Edit</h4></a></td>
+                        <td><a href="remove_transaction?id={{ trans[0] }}"><h4 style="color:red">Delete</h4></a></td>
                     </tr>
                     {% endfor %}
-                    <!--{% endif %}-->
-            </tbody>
-
+                    {% endif %}
+{#                </tbody>#}
             </table>
-    <!--    </div> -->
-        <p>Enter transaction details.</p>
-        <form action="/add_transaction" method="POST">
-            Description: <input type="text" name="transaction_description"><br>
-            Amount:       <input type="text" name="transaction_amount"><br>
-            Date : <input type="date" name="transaction_date"><br>
-            Category: <select name="transaction_category">
-                <option value="uncategorized">Uncategorizied</option>
-                <option value="food">Food</option>
-                <option value="auto">Auto</option>
-            </select>
-            <button type="submit">Submit Transaction</button>
-        </form>
-        <form action = "remove_transaction" method ="POST">
-            ID: <input type ="text" name="id"><br>
-            <button type="submit">Delete this transaction</button>
-        </form>
+        </div>
+
+        <div class="add-transaction-window">
+            <div class="add-transaction-form">
+                <h2>Add Transaction</h2>
+                <form action="/add_transaction" method="POST">
+                    <p>Description: </p><input type="text" name="transaction_description">
+                    <p>Amount: </p><input type="text" name="transaction_amount">
+                    <p>Date: </p><input type="date" name="transaction_date">
+                    <p>Category: </p><input type="text" name="transaction_category">
+                    <input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height: auto">
+                </form>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

@@ -59,88 +59,6 @@ ul {
     background-color: #34DBCA;
 }
 
-/* MAIN PAGE */
-.wrapper {
-    width: 85vw;
-    margin: 30px auto 0;
-    background-color: #FFFFFF;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border-radius: 5px;
-}
-
-header {
-    text-align: right;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #C9C9C9;
-}
-
-    header a {
-        font-size: 20px;
-        color: #FFFFFF;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        margin-left: 10px;
-        text-align: center;
-        display: inline-block;
-    }
-
-        header a:hover, .list-mode header a.hide-list:hover {
-            background-color: #3498DB;
-        }
-
-        header a.user-session {
-            width: auto;
-            text-decoration: none;
-        }
-
-        header a.hide-list {
-            background-color: #3498DB;
-        }
-
-.list-mode header a.hide-list {
-    /* make the color transparent*/
-    background-color: rgba(0,0,0,0);
-}
-
-.list-mode header a.show-list {
-    background-color: #3498DB;
-}
-
-.container:after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.container {
-    padding: 10px 0 10px 10px;
-}
-
-.wrapper .box {
-    float: left;
-    width: 100px;
-    height: 100px;
-    margin: 0 10px 10px 0;
-    background-color: #CCCCCC;
-    -webkit-transition: all 1.0s ease;
-    -moz-transition: all 1.0s ease;
-    transition: all 1.0s ease;
-    transition: all 1.0s ease;
-}
-
-.wrapper.list-mode .container {
-    padding-right: 10px;
-}
-
-.wrapper.list-mode .box {
-    width: 100%;
-}
-
-
 /* LOGIN/REGISTRATION PAGES */
 .login {
     margin: 20px auto;
@@ -183,7 +101,7 @@ header {
     color: #444;
     border: 2px solid #ff7272;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin: 10px 10px;
     padding: 15px;
 }
 
@@ -242,32 +160,55 @@ ul {
 
 
 .main-content {
-    display: block;
+    margin-top: 15px;
 
 }
 
 .transaction-window {
-    height: 500px;
+    height: 400px;
     margin: auto;
     border-radius: 8px;
-    overflow: scroll;
-    background: lightgray;
+    width: 55%;
+    background: white;
     border-style: solid;
-}
-table{
-	background: lightgray;
-}
-table thead tr{
-    display:block;
+    display: table;
+    float: left;
 }
 
-table th,table td{
-    width:500px;//fixed width
+.scrollTable {
+    width: 100%;
 }
 
-
-table  tbody{
-  display:block;
-  height:200px;
-  overflow:auto;//set tbody to auto
+.add-transaction-window {
+    border-radius: 8px;
+    border-style: solid;
+    float: right;
+    background-color: white;
+    width: 43%;
+    height: 400px;
 }
+
+.add-transaction-form {
+    padding: 20px;
+}
+.add-transaction-window p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.add-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+}
+
+.edit-transaction-form {
+    border-radius: 8px;
+    border-style: solid;
+    margin: auto;
+    background-color: white;
+    width: 70%;
+    height: 400px;
+}
+
