@@ -9,25 +9,27 @@
             <table border ="0" cellpadding = "0" width = "100%" class="scrollTable">
                 <thead class ="fixedHeader">
                     <tr>
+                    <th>ID</th>
                     <th>Category</th>
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Date</th>
+                    <th>Edit</th>
                  </tr>
              </thead>
                 <tbody>
-                    {% if transaction_list > [] %}
+                    <!--{% if transaction_list > [] %}-->
                     {% for trans in transaction_list %}
                     <tr>
+                        <th>{{trans[0]}}</th>
                         <th>{{trans[1]}}</th>
-                        <th>{{trans[2]}}</th>
                         <th>{{trans[3]}}</th>
+                        <th>{{trans[2]}}</th>
                         <th>{{trans[4]}}</th>
-                    </tr>
-                    </tr>
+                        <th><button>edit</button></th>
                     </tr>
                     {% endfor %}
-                    {% endif %}
+                    <!--{% endif %}-->
             </tbody>
 
             </table>
@@ -43,6 +45,10 @@
                 <option value="auto">Auto</option>
             </select>
             <button type="submit">Submit Transaction</button>
+        </form>
+        <form action = "remove_transaction" method ="POST">
+            ID: <input type ="text" name="id"><br>
+            <button type="submit">Delete this transaction</button>
         </form>
     </div>
 

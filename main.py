@@ -53,16 +53,15 @@ def add_transaction_action():
 
 
 # Removes the transaction with a given ID (note that this uses the URL query '?id=XXX')
-@app.route('/remove_transaction')
+@app.route('/remove_transaction',methods = ['POST'])
 def remove_transaction_action():
+    transaction_id=int(request.form['id'])
     username = session.get('user_data').get('username')
-    transaction_id = request.args.get('id')
-
     # Verify that the user owns the transaction and remove it
     transaction_list = DbFunctions.get_transactions(username, user_table, transaction_table)
     for transaction_data in transaction_list:
         if transaction_data[0] == transaction_id:
-            DbFunctions.remove_trans(transaction_id)
+            DbFunctions.remove_trans(transaction_id,transaction_table)
             flash('Your transaction was removed.')
             return redirect('/')
 
