@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 engine = create_engine('sqlite:///cattable.db', echo = True)
 Base = declarative_base()
 
-class Catagory(Base):
+class Category(Base):
 
     __tablename__ = "categories"
 

@@ -10,6 +10,24 @@
     {%  endblock %}
 </head>
 <body>
+    <div class="dash-header">
+        <ul>
+            <li>
+                {% if session['logged_in'] %}
+                    <h2>Hello {{ username }}!</h2>
+                {% else %}
+                    <h2>Not logged in!</h2>
+                {% endif %}
+            </li>
+            <li style="float:right" id="logout">
+                {% if session['logged_in'] %}
+                    <h2><a href="/logout">Log out.</a></h2>
+                {% else %}
+                    <h2><a href="/">Go back.</a></h2>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
     {% block content %}
     {% endblock %}
 </body>

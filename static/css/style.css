@@ -11,14 +11,20 @@
         outline: none;
     }
 
-html, body {
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+body {
     background-color: #3498DB;
     font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
     height: 100%;
-    width: 100%;
+    width: 80%;
     text-align: center;
     color: #404040;
     position: relative;
+    margin: auto;
 }
 
 a {
@@ -28,88 +34,30 @@ a {
     transition: all 0.3s ease;
 }
 
-
-/* MAIN PAGE */
-.wrapper {
-    width: 85vw;
-    margin: 30px auto 0;
-    background-color: #FFFFFF;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    border-radius: 5px;
+/* Base template header */
+ul {
+    border-radius: 3px;
 }
-
-header {
-    text-align: right;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #C9C9C9;
-}
-
-    header a {
-        font-size: 20px;
-        color: #FFFFFF;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        margin-left: 10px;
-        text-align: center;
-        display: inline-block;
+    ul li {
+        float: left;
     }
 
-        header a:hover, .list-mode header a.hide-list:hover {
-            background-color: #3498DB;
+        ul li h2 {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            height: 100%;
         }
 
-        header a.user-session {
-            width: auto;
-            text-decoration: none;
-        }
+    ul li a {
+        text-decoration: none;
+        color: white;
+    }
 
-        header a.hide-list {
-            background-color: #3498DB;
-        }
-
-.list-mode header a.hide-list {
-    /* make the color transparent*/
-    background-color: rgba(0,0,0,0);
+#logout:hover {
+    background-color: #34DBCA;
 }
-
-.list-mode header a.show-list {
-    background-color: #3498DB;
-}
-
-.container:after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.container {
-    padding: 10px 0 10px 10px;
-}
-
-.wrapper .box {
-    float: left;
-    width: 100px;
-    height: 100px;
-    margin: 0 10px 10px 0;
-    background-color: #CCCCCC;
-    -webkit-transition: all 1.0s ease;
-    -moz-transition: all 1.0s ease;
-    transition: all 1.0s ease;
-    transition: all 1.0s ease;
-}
-
-.wrapper.list-mode .container {
-    padding-right: 10px;
-}
-
-.wrapper.list-mode .box {
-    width: 100%;
-}
-
 
 /* LOGIN/REGISTRATION PAGES */
 .login {
@@ -135,10 +83,16 @@ header {
 
 .login-form {
     text-align: center;
+    padding-top: 20px;
+    width: 80%;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
 }
 
 .control-group {
-    margin-bottom: 10px;
+    width: 70%;
+    margin: auto auto 10px;
 }
 
 .flashes {
@@ -147,7 +101,7 @@ header {
     color: #444;
     border: 2px solid #ff7272;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin: 10px 10px;
     padding: 15px;
 }
 
@@ -189,9 +143,96 @@ input {
         background-color: #2980B9;
     }
 
+.cancel {
+    background-color: #FF0000;
+
+}
+
+    .cancel:hover {
+        background-color: #DC0202;
+    }
+
 .login-link {
     font-size: 12px;
     color: #444;
     display: block;
     margin-top: 12px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3445DB;
+}
+
+
+.main-content {
+    margin-top: 15px;
+
+}
+
+.transaction-window {
+    height: 400px;
+    margin: auto;
+    border-radius: 8px;
+    width: 55%;
+    background: white;
+    border-style: solid;
+    display: table;
+    float: left;
+}
+
+.scrollTable {
+    width: 100%;
+}
+
+.add-transaction-window {
+    border-radius: 8px;
+    border-style: solid;
+    float: right;
+    background-color: white;
+    width: 43%;
+    height: 400px;
+}
+
+.add-transaction-form {
+    padding: 20px;
+}
+.add-transaction-window p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.add-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+}
+
+.edit-transaction-window {
+    width: 70%;
+    margin: auto;
+}
+.edit-transaction-form {
+    border-radius: 8px;
+    border-style: solid;
+    margin: 15px auto;
+    padding: 10px;
+    background-color: white;
+    width: 70%;
+}
+
+.edit-transaction-form p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.edit-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
 }
