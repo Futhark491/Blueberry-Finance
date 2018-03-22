@@ -12,51 +12,54 @@
     {% endwith %}
 
     <div class="main-content">
-        <div class="transaction-window">
-            <table class="scrollTable">
-{#                <thead class ="fixedHeader">#}
-                    <tr>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                        <th>Category</th>
-                    </tr>
-{#                </thead>#}
 
-{#                <tbody>#}
-                    {% if transaction_list > [] %}
-                    {% for trans in transaction_list %}
-                    <tr class="transaction">
-                        <td>{{trans[4]}}</td>
-                        <td>{{trans[3]}}</td>
-                        <td>{{trans[2]}}</td>
-                        <td>{{trans[1]}}</td>
-                        <td><a href="edit_transaction?id={{ trans[0] }}"><h4>Edit</h4></a></td>
-                        <td><a href="remove_transaction?id={{ trans[0] }}"><h4 style="color:red">Delete</h4></a></td>
-                    </tr>
-                    {% endfor %}
-                    {% endif %}
-{#                </tbody>#}
-            </table>
+        <div class="visualizations">
+            <h3>Insert visualizations here</h3>
         </div>
 
-        <div class="add-transaction-window">
-            <div class="add-transaction-form">
-                <h2>Add Transaction</h2>
+        <div class="transaction-window">
+            <div class="add-transaction-window">
+                <div class="add-transaction-form">
+                    <h2>Add Transaction</h2>
+
+                </div>
+            </div>
+
+            <table class="scrollTable">
                 <form action="/add_transaction" method="POST">
-                    <p>Description: </p><input type="text" name="transaction_description">
-                    <p>Amount: </p><input type="text" name="transaction_amount">
-                    <p>Date: </p><input type="date" name="transaction_date">
-                    Category: 
-                    <select name = "transaction_category">
-                        {% for category in category_list %}
-                        <option value="{{category[1]}}">{{category[1]}}</option>
-                        {% endfor %}
-                     </select>
-                
+                    <tr>
+                        <td><input type="text" name="transaction_description" placeholder="Description"></td>
+                        <td><input type="text" name="transaction_amount" placeholder="Amount"></td>
+                        <td><input type="date" name="transaction_date" placeholder="Date"></td>
+                        <td><select name = "transaction_category" placeholder="Category">
+                            {% for category in category_list %}
+                            <option value="{{category[1]}}">{{category[1]}}</option>
+                            {% endfor %}
+                        </select></td>
+                    </tr>
+
                     <input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height: auto">
                 </form>
-            </div>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                </tr>
+
+                {% if transaction_list > [] %}
+                {% for trans in transaction_list %}
+                <tr class="transaction">
+                    <td>{{trans[4]}}</td>
+                    <td>{{trans[3]}}</td>
+                    <td>{{trans[2]}}</td>
+                    <td>{{trans[1]}}</td>
+                    <td><a href="edit_transaction?id={{ trans[0] }}"><h4>Edit</h4></a></td>
+                    <td><a href="remove_transaction?id={{ trans[0] }}"><h4 style="color:red">Delete</h4></a></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
         </div>
     </div>
 

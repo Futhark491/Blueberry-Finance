@@ -170,31 +170,36 @@ ul {
 
 .main-content {
     margin-top: 15px;
-
+    display: grid;
+    grid-template-columns: 45% 45%;
+    grid-row: auto;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    border: 2px dashed black;
 }
 
+.visualizations {
+    border: 2px solid black;
+}
 .transaction-window {
-    height: 400px;
+    height: auto;
     margin: auto;
     border-radius: 8px;
-    width: 55%;
     background: white;
     border-style: solid;
     display: table;
-    float: left;
 }
 
 .scrollTable {
     width: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .add-transaction-window {
     border-radius: 8px;
     border-style: solid;
-    float: right;
     background-color: white;
-    width: 43%;
-    height: 400px;
 }
 
 .add-transaction-form {
