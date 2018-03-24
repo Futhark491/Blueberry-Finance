@@ -22,3 +22,11 @@
     margin-top: 20px;
     height: 40px;
 }
+
+.edit-transaction-window select {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+    background-color: #ECF0F1;
+    text-align-last: center;
+}
