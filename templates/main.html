@@ -61,6 +61,38 @@
                 {% endif %}
             </table>
         </div>
-    </div>
+<div class="visualizations">
+            <h3>Insert expected visualizations here</h3>
+        </div>
+        <div class = "category-window">
+            <div class="add-transaction-window">
+                <div class="add-transaction-form">
+                    <h2>Add a Category</h2>
 
+                </div>
+            </div>
+
+            <table class ="scrollTable" >
+             <form><!-- Needs the list to the add cat  -->
+            <tr>
+            <td><input type="text" name = "category_name" placeholder="Name"></td>
+            <td><input type ="text" name = "expected_budget" placeholder="Budget"></td>
+            </tr>
+            <input type ="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height:auto">
+             </form>
+              {% if category_list > [] %}
+            {% for cat in category_list %}
+            <tr class="transaction">
+                <td>{{cat[1]}}</td>
+                <td>{{cat[2]}}</td>
+                <td><a href="/"><h4>Edit</h4></a></td>
+                 <td><a href="/"><h4 style="color:red">Delete</h4></a></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            </table>
+        </div>
+
+    </div>
+    
 {% endblock %}

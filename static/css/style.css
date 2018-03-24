@@ -189,6 +189,13 @@ ul {
     border-style: solid;
     display: table;
 }
+.category-window{
+	height: auto;
+	border-radius: 8px;
+	background:white;
+	border-style:solid;
+	display: table;
+}
 
 .scrollTable {
     width: 100%;
