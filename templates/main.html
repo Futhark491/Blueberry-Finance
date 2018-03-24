@@ -1,6 +1,5 @@
 {%  extends "baseLayout.html" %}
 {% block content %}
-
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <div class="flashes">
@@ -17,28 +16,21 @@
             <h3>Insert visualizations here</h3>
         </div>
 
-        <div class="transaction-window">
-            <div class="add-transaction-window">
-                <div class="add-transaction-form">
-                    <h2>Add Transaction</h2>
-
-                </div>
-            </div>
-
+        <div class="sub-window">
             <table class="scrollTable">
                 <form action="/add_transaction" method="POST">
                     <tr>
+                        <td><input type="date" name="transaction_date" placeholder="Date"></td>
                         <td><input type="text" name="transaction_description" placeholder="Description"></td>
                         <td><input type="text" name="transaction_amount" placeholder="Amount"></td>
-                        <td><input type="date" name="transaction_date" placeholder="Date"></td>
                         <td><select name = "transaction_category" placeholder="Category">
                             {% for category in category_list %}
                             <option value="{{category[1]}}">{{category[1]}}</option>
                             {% endfor %}
                         </select></td>
+                        <td><input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height: auto"></td>
                     </tr>
 
-                    <input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height: auto">
                 </form>
                 <tr>
                     <th>Date</th>
@@ -61,38 +53,32 @@
                 {% endif %}
             </table>
         </div>
-<div class="visualizations">
-            <h3>Insert expected visualizations here</h3>
+
+        <div class="visualizations">
+                <h3>Insert expected visualizations here</h3>
         </div>
-        <div class = "category-window">
-            <div class="add-transaction-window">
-                <div class="add-transaction-form">
-                    <h2>Add a Category</h2>
 
-                </div>
-            </div>
-
+        <div class = "sub-window">
             <table class ="scrollTable" >
-             <form><!-- Needs the list to the add cat  -->
-            <tr>
-            <td><input type="text" name = "category_name" placeholder="Name"></td>
-            <td><input type ="text" name = "expected_budget" placeholder="Budget"></td>
-            </tr>
-            <input type ="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height:auto">
-             </form>
-              {% if category_list > [] %}
-            {% for cat in category_list %}
-            <tr class="transaction">
-                <td>{{cat[1]}}</td>
-                <td>{{cat[2]}}</td>
-                <td><a href="/"><h4>Edit</h4></a></td>
-                 <td><a href="/"><h4 style="color:red">Delete</h4></a></td>
-            </tr>
-            {% endfor %}
-            {% endif %}
+                 <form action="/add_category" method="POST">
+                     <tr>
+                         <td><input type="text" name = "category_name" placeholder="Name"></td>
+                         <td><input type ="text" name = "expected_budget" placeholder="Budget"></td>
+                         <td><input type ="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height:auto"></td>
+                     </tr>
+                 </form>
+                {% if category_list > [] %}
+                {% for cat in category_list %}
+                <tr class="transaction">
+                    <td>{{cat[1]}}</td>
+                    <td>{{cat[2]}}</td>
+                    <td><a href="/"><h4>Edit</h4></a></td>
+                    <td><a href="/"><h4 style="color:red">Delete</h4></a></td>
+                </tr>
+                {% endfor %}
+                {% endif %}
             </table>
         </div>
-
     </div>
     
 {% endblock %}

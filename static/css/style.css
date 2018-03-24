@@ -34,60 +34,25 @@ a {
     transition: all 0.3s ease;
 }
 
-/* Base template header */
 ul {
     border-radius: 3px;
 }
-    ul li {
-        float: left;
-    }
 
-        ul li h2 {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            height: 100%;
-        }
-
-    ul li a {
-        text-decoration: none;
-        color: white;
-    }
-
-#logout:hover {
-    background-color: #34DBCA;
+ul li {
+    float: left;
 }
 
-/* LOGIN/REGISTRATION PAGES */
-.login {
-    margin: 20px auto;
-    width: 300px;
-}
-
-.register {
-    width: 50vw;
-}
-
-.login-screen {
-    background-color: #FFF;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-.app-title {
+ul li h2 {
+    display: block;
+    color: white;
     text-align: center;
-    color: #777;
-    margin: 0 20px 20px 20px;
+    padding: 14px 16px;
+    height: 100%;
 }
 
-.login-form {
-    text-align: center;
-    padding-top: 20px;
-    width: 80%;
-    margin: auto;
-    background: white;
-    border-radius: 10px;
+ul li a {
+    text-decoration: none;
+    color: white;
 }
 
 .control-group {
@@ -143,6 +108,7 @@ input {
         background-color: #2980B9;
     }
 
+
 .cancel {
     background-color: #FF0000;
 
@@ -152,13 +118,6 @@ input {
         background-color: #DC0202;
     }
 
-.login-link {
-    font-size: 12px;
-    color: #444;
-    display: block;
-    margin-top: 12px;
-}
-
 ul {
     list-style-type: none;
     margin: 0;
@@ -167,34 +126,71 @@ ul {
     background-color: #3445DB;
 }
 
+/* Start Login/Register Pages */
+.login {
+    margin: 20px auto;
+    width: 300px;
+}
 
+.screen {
+    background-color: #FFF;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.input-form {
+    text-align: center;
+    padding-top: 20px;
+    width: 80%;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
+}
+
+.login-link {
+    font-size: 12px;
+    color: #444;
+    display: block;
+    margin-top: 12px;
+}
+
+#logout:hover {
+    background-color: #34DBCA;
+}
+
+.app-title {
+    text-align: center;
+    color: #777;
+    margin: 0 20px 20px 20px;
+}
+
+.register {
+    width: 50vw;
+}
+/* End Login/Register Pages */
+
+/*Start Main Dashboard*/
 .main-content {
     margin-top: 15px;
     display: grid;
-    grid-template-columns: 45% 45%;
+    grid-template-columns: repeat(2, 1fr);
     grid-row: auto;
     grid-column-gap: 20px;
     grid-row-gap: 20px;
-    border: 2px dashed black;
+    border: 2px dashed green;
+    overflow: hidden;
 }
 
 .visualizations {
-    border: 2px solid black;
+    border: 2px solid pink;
 }
-.transaction-window {
-    height: auto;
+
+.sub-window {
     margin: auto;
+    width: 100%;
     border-radius: 8px;
     background: white;
     border-style: solid;
-    display: table;
-}
-.category-window{
-	height: auto;
-	border-radius: 8px;
-	background:white;
-	border-style:solid;
-	display: table;
 }
 
 .scrollTable {
@@ -210,41 +206,20 @@ ul {
 }
 
 .add-transaction-form {
-    padding: 20px;
+    /*padding: 20px;*/
 }
 .add-transaction-window p {
-    float: left;
-    margin-top: 20px;
-    width: 30%;
+    /*float: left;*/
+    /*margin-top: 20px;*/
+    /*width: 30%;*/
 }
 
 .add-transaction-window input {
-    width: 60%;
-    margin-top: 20px;
-    height: 40px;
+    /*width: 60%;*/
+    /*margin-top: 20px;*/
+    /*height: 40px;*/
 }
 
-.edit-transaction-window {
-    width: 70%;
-    margin: auto;
-}
-.edit-transaction-form {
-    border-radius: 8px;
-    border-style: solid;
-    margin: 15px auto;
-    padding: 10px;
-    background-color: white;
-    width: 70%;
-}
+/* End Dashboard */
 
-.edit-transaction-form p {
-    float: left;
-    margin-top: 20px;
-    width: 30%;
-}
-
-.edit-transaction-window input {
-    width: 60%;
-    margin-top: 20px;
-    height: 40px;
-}
+/* Start transactionEditor */

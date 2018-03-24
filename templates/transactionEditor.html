@@ -1,5 +1,8 @@
 {% extends "baseLayout.html" %}
 {%  block content %}
+    <head>
+        <link rel="stylesheet" href={{ url_for('static', filename='css/transactionEditor.css') }} type="text/css">
+    </head>
     <div class="edit-transaction-window">
         <h1 style="margin-top:5px">Transaction Editor</h1>
         <div class="edit-transaction-form">

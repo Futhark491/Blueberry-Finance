@@ -1,0 +1,24 @@
+.edit-transaction-window {
+    width: 70%;
+    margin: auto;
+}
+.edit-transaction-form {
+    border-radius: 8px;
+    border-style: solid;
+    margin: 15px auto;
+    padding: 10px;
+    background-color: white;
+    width: 70%;
+}
+
+.edit-transaction-form p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.edit-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+}
