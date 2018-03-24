@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
 import modules.transactions.transactions as ta
+import modules.standard.stdfn as stdfn
 
 
 # Static variables
@@ -134,6 +135,54 @@ def edit_transaction_action():
 
     if not succeed:
         flash('Your transaction could not be updated.')
+
+    return redirect('/')
+
+
+# Adds a category to the database
+@app.route('/add_category', methods=['POST'])
+def add_category_action():
+    username = session.get('user_data').get('username')
+    name = request.form['category_name']
+    value = request.form['transaction_amount']
+
+    # Sanitize inputs
+    if not stdfn.verify_input_sanitization(name):
+        flash('Invalid category name.')
+        return redirect('/')
+    if not stdfn.verify_input_sanitization(value):
+        flash('Invalid category value.')
+        return redirect('/')
+
+    # Add transaction to database
+    if (DbFunctions.add_cat(username, user_table,
+                            name, value, category_table)):
+        flash('Category added.')
+    else:
+        flash('Failed to add category.')
+
+    return redirect('/')
+
+
+# Removes the transaction with a given ID
+# (note that this uses the URL query '?id=XXX')
+@app.route('/remove_category')
+def remove_category_action():
+    category_id = int(request.args.get('id'))
+    username = session.get('user_data').get('username')
+    # Verify that the user owns the transaction and remove it
+    category_list = DbFunctions.get_categories(username,
+                                               user_table,
+                                               transaction_table)
+    for category_data in category_list:
+        if (category_data[0] == category_id and category_data[1] is not 'Uncategorized'):
+
+            DbFunctions.remove_cat(category_id, category_table)
+            flash('Your category was removed.')
+            return redirect('/')
+
+    # Transaction not found/ not owned by the user
+    flash('There was an error removing the category.')
 
     return redirect('/')
 
