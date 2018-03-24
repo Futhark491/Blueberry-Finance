@@ -79,7 +79,9 @@ input {
     font-weight: 200;
     padding: 10px 0;
     width: 100%;
+    height: 100%;
     transition: border .5s;
+    overflow: hidden;
 }
 
     input:focus {
@@ -193,33 +195,59 @@ ul {
     border-style: solid;
 }
 
-.scrollTable {
+.column-header {
     width: 100%;
-    overflow: scroll;
-    overflow-x: hidden;
+    display: flex;
 }
 
-.add-transaction-window {
-    border-radius: 8px;
-    border-style: solid;
-    background-color: white;
+.addTransactionHeader {
+    display: inline-flex;
+    padding: 0;
+    margin: 0;
+    height: 30px;
+    width: 100%;
 }
 
-.add-transaction-form {
-    /*padding: 20px;*/
-}
-.add-transaction-window p {
-    /*float: left;*/
-    /*margin-top: 20px;*/
-    /*width: 30%;*/
+.addTransactionHeader .date {
+    width: 25%;
 }
 
-.add-transaction-window input {
-    /*width: 60%;*/
-    /*margin-top: 20px;*/
-    /*height: 40px;*/
+.addTransactionHeader .descrip {
+    width: 22%;
 }
 
+.addTransactionHeader .amount {
+    width: 18%;
+}
+
+.addTransactionHeader .cat {
+    width: 20%;
+    text-align-last: center;
+}
+
+.addTransactionHeader .add {
+    width: 15%;
+}
+
+.addTransactionHeader .add .inline-submit {
+    border: 2px solid transparent;
+    background: #3498DB;
+    color: #ffffff;
+    font-size: 16px;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    width: 100%;
+    margin: auto;
+    vertical-align: center;
+}
+
+    .inline-submit:hover {
+        background-color: #2980B9;
+    }
 /* End Dashboard */
 
 /* Start transactionEditor */

@@ -17,28 +17,27 @@
         </div>
 
         <div class="sub-window">
+            <div class="column-header">
+                <h3 style="width: 25%">Date</h3>
+                <h3 style="width: 22%">Description</h3>
+                <h3 style="width: 18%">Amount</h3>
+                <h3 style="width: 20%">Category</h3>
+            </div>
+
+            <form action="/add_transaction" method="POST">
+                <div class="addTransactionHeader">
+                    <div class="date"><input type="date" name="transaction_date" placeholder="Date" style="border-radius: 0"></div>
+                    <div class="descrip"><input type="text" name="transaction_description" placeholder="Description" style="border-radius: 0"></div>
+                    <div class="amount"><input type="text" name="transaction_amount" placeholder="Amount" style="border-radius: 0"></div>
+                    <div class="cat"><select name = "transaction_category" placeholder="Category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
+                        {% for category in category_list %}
+                        <option value="{{category[1]}}">{{category[1]}}</option>
+                        {% endfor %}
+                    </select></div>
+                    <div class="add"><input type="submit" value="Add" class="inline-submit"></div>
+                </div>
+            </form>
             <table class="scrollTable">
-                <form action="/add_transaction" method="POST">
-                    <tr>
-                        <td><input type="date" name="transaction_date" placeholder="Date"></td>
-                        <td><input type="text" name="transaction_description" placeholder="Description"></td>
-                        <td><input type="text" name="transaction_amount" placeholder="Amount"></td>
-                        <td><select name = "transaction_category" placeholder="Category">
-                            {% for category in category_list %}
-                            <option value="{{category[1]}}">{{category[1]}}</option>
-                            {% endfor %}
-                        </select></td>
-                        <td><input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height: auto"></td>
-                    </tr>
-
-                </form>
-                <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Category</th>
-                </tr>
-
                 {% if transaction_list > [] %}
                 {% for trans in transaction_list %}
                 <tr class="transaction">
