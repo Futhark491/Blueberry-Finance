@@ -81,6 +81,16 @@ def add_user(username, password, user_table, cat_table, cats):
 #Returns False if the user does not exist
 #Otherwise deletes the user
 def remove_user(username, user_table):
+    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+    if query.count() < 1:
+        return []
+    user_id = query.first().id
+    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
+    for row in query:
+        remove_cat(row.id, cat_table)
+    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
+    for row in query:
+        remove_trans(row.id, tran_table)
     user_table.query(loginDb.User).filter(loginDb.User.username == username).delete()
     user_table.commit()
 
