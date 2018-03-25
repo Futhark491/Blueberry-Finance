@@ -1,0 +1,238 @@
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: auto;
+    margin: 0;
+    padding: 0;
+}
+
+    *:focus {
+        outline: none;
+    }
+
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #3498DB;
+    font-family: Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;
+    height: 100%;
+    width: 80%;
+    text-align: center;
+    color: #404040;
+    position: relative;
+    margin: auto;
+}
+
+a {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+/* Base template header */
+ul {
+    border-radius: 3px;
+}
+    ul li {
+        float: left;
+    }
+
+        ul li h2 {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            height: 100%;
+        }
+
+    ul li a {
+        text-decoration: none;
+        color: white;
+    }
+
+#logout:hover {
+    background-color: #34DBCA;
+}
+
+/* LOGIN/REGISTRATION PAGES */
+.login {
+    margin: 20px auto;
+    width: 300px;
+}
+
+.register {
+    width: 50vw;
+}
+
+.login-screen {
+    background-color: #FFF;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.app-title {
+    text-align: center;
+    color: #777;
+    margin: 0 20px 20px 20px;
+}
+
+.login-form {
+    text-align: center;
+    padding-top: 20px;
+    width: 80%;
+    margin: auto;
+    background: white;
+    border-radius: 10px;
+}
+
+.control-group {
+    width: 70%;
+    margin: auto auto 10px;
+}
+
+.flashes {
+    text-align: center;
+    background: #fc9797;
+    color: #444;
+    border: 2px solid #ff7272;
+    border-radius: 5px;
+    margin: 10px 10px;
+    padding: 15px;
+}
+
+input {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 10px 0;
+    width: 100%;
+    transition: border .5s;
+}
+
+    input:focus {
+        border: 2px solid #3498DB;
+        box-shadow: none;
+    }
+
+.btn {
+    border: 2px solid transparent;
+    background: #3498DB;
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    width: 250px;
+    margin: 0 auto;
+}
+
+    .btn:hover {
+        background-color: #2980B9;
+    }
+
+.cancel {
+    background-color: #FF0000;
+
+}
+
+    .cancel:hover {
+        background-color: #DC0202;
+    }
+
+.login-link {
+    font-size: 12px;
+    color: #444;
+    display: block;
+    margin-top: 12px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3445DB;
+}
+
+
+.main-content {
+    margin-top: 15px;
+
+}
+
+.transaction-window {
+    height: 400px;
+    margin: auto;
+    border-radius: 8px;
+    width: 55%;
+    background: white;
+    border-style: solid;
+    display: table;
+    float: left;
+}
+
+.scrollTable {
+    width: 100%;
+}
+
+.add-transaction-window {
+    border-radius: 8px;
+    border-style: solid;
+    float: right;
+    background-color: white;
+    width: 43%;
+    height: 400px;
+}
+
+.add-transaction-form {
+    padding: 20px;
+}
+.add-transaction-window p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.add-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+}
+
+.edit-transaction-window {
+    width: 70%;
+    margin: auto;
+}
+.edit-transaction-form {
+    border-radius: 8px;
+    border-style: solid;
+    margin: 15px auto;
+    padding: 10px;
+    background-color: white;
+    width: 70%;
+}
+
+.edit-transaction-form p {
+    float: left;
+    margin-top: 20px;
+    width: 30%;
+}
+
+.edit-transaction-window input {
+    width: 60%;
+    margin-top: 20px;
+    height: 40px;
+}

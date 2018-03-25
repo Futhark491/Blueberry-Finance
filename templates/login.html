@@ -3,11 +3,14 @@
     {% if session['logged_in'] %}
         <p>You're logged in already!</p>
     {% else %}
+         <div class="header" style="padding-bottom:20px">
+            <h1>Welcome to Blueberry Finance!</h1>
+        </div>
         <form action="/login" method="POST">
-            <div class="login">
+            <div class="login register">
                 <div class="login-screen">
                     <div class="app-title">
-                        <h1>Login</h1>
+                        <h1>Log In</h1>
                     </div>
 
                     {% with messages = get_flashed_messages() %}
@@ -22,22 +25,21 @@
 
                     <div class="login-form">
                         <div class="control-group">
-                        <input type="text" class="login-field" value="" placeholder="username" name="username">
-                        <label class="login-field-icon fui-user" for="login-name"></label>
+                            <input type="text" class="login-field" value="" placeholder="username" name="username">
+                            <label class="login-field-icon fui-user" for="login-name"></label>
                         </div>
 
                         <div class="control-group">
-                        <input type="password" class="login-field" value="" placeholder="password" name="password">
-                        <label class="login-field-icon fui-lock" for="login-pass"></label>
+                            <input type="password" class="login-field" value="" placeholder="password" name="password">
+                            <label class="login-field-icon fui-lock" for="login-pass"></label>
                         </div>
 
-                        <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block" >
-                        <br>
+                        <input type="submit" value="Log in" class="btn btn-primary btn-large btn-block">
                     </div>
-                    <p><a href="/register">Register</a></p>
                 </div>
             </div>
+            <h2>Need a new account?</h2>
+            <h2><a href="/registration">Register</a></h2>
         </form>
-
     {% endif %}
 {% endblock %}
