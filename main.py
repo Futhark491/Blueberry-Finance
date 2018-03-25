@@ -38,6 +38,22 @@ def home_page():
                                                         user_table,
                                                         transaction_table)
 
+        # Convert the number to have a cents place regardless of value
+        for transaction in transaction_list:
+            # Convert number to string
+            transaction_num = str(transaction[2])
+            # If there is a decimal place already in the number
+            if '.' in transaction_num:
+                # If there is only one number after the decimal
+                if transaction_num[-2] == '.':
+                    # Add a zero to the end
+                    transaction_num += '0'
+            # If there isn't a decimal in the number already
+            else:
+                # Add placeholders
+                transaction_num += '.00'
+            transaction[2] = transaction_num
+
         return render_template('main.html',
                                username=username,
                                category_list=category_list,
@@ -175,7 +191,8 @@ def remove_category_action():
                                                user_table,
                                                transaction_table)
     for category_data in category_list:
-        if (category_data[0] == category_id and category_data[1] is not 'Uncategorized'):
+        if (category_data[0] == category_id and
+            category_data[1] is not 'Uncategorized'):
 
             DbFunctions.remove_cat(category_id, category_table)
             flash('Your category was removed.')
