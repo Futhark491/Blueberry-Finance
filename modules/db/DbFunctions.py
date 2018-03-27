@@ -38,6 +38,7 @@ def validate_user(user_name, pass_word, user_table):
 #Returns false if the user does not exist or if they have no catagories
 #Returns a dictionary of catagories and their values for the user
 def get_categories(username, user_table, cat_table):
+
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
         return []
@@ -47,6 +48,14 @@ def get_categories(username, user_table, cat_table):
         return []
 
     cats = []
+    query2 = user_table.query(loginDb.User).filter(loginDb.User.username == 'master')
+    if query2.count() < 1:
+        add_user('master', 'uncategorized', user_table, cat_table, {'uncategorized': '0'})
+    query2 = user_table.query(loginDb.User).filter(loginDb.User.username == 'master')
+    user_id = query2.first().id
+    query2 = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
+    for row in query2:
+        cats.append([row.id, row.catName, row.catVal])
     for row in query:
         cats.append([row.id, row.catName, row.catVal])
 
@@ -57,6 +66,7 @@ def get_categories(username, user_table, cat_table):
 #Returns False if the user already exists
 #Creates the new user and then creates their default catagories with their userID
 def add_user(username, password, user_table, cat_table, cats):
+
     query = user_table.query(loginDb.User).filter(loginDb.User.username.in_([username]))
     result = query.first()
 
@@ -80,7 +90,17 @@ def add_user(username, password, user_table, cat_table, cats):
 #Pass the username and user database
 #Returns False if the user does not exist
 #Otherwise deletes the user
-def remove_user(username, user_table):
+def remove_user(username, user_table, cat_table, tran_table):
+    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+    if query.count() < 1:
+        return []
+    user_id = query.first().id
+    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
+    for row in query:
+        remove_cat(row.id, cat_table)
+    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
+    for row in query:
+        remove_trans(row.id, tran_table)
     user_table.query(loginDb.User).filter(loginDb.User.username == username).delete()
     user_table.commit()
 
