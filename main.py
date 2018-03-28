@@ -102,35 +102,8 @@ def remove_transaction_action():
     return redirect('/')
 
 
-# Redirects the user to a form page to edit the transaction data,
-# or back to the dashboard if no transactions were found
-@app.route('/edit_transaction')
-def edit_transaction_page():
-    username = session.get('user_data').get('username')
-    transaction_id = int(request.args.get('id'))
-
-    # Get the transaction from the database if the user owns it
-    # (code below is temporary, using the description as the ID)
-    transaction_list = DbFunctions.get_transactions(username,
-                                                    user_table,
-                                                    transaction_table)
-    for transaction_data in transaction_list:
-        if transaction_data[0] == transaction_id:
-            category_list = DbFunctions.get_categories(username,
-                                                       user_table,
-                                                       category_table)
-            return render_template('transactionEditor.html',
-                                   username=username,
-                                   category_list=category_list,
-                                   transaction_data=transaction_data)
-
-    # Transaction not found/ not owned by the user
-    flash('There was an error editing the transaction.')
-    return redirect('/')
-
-
-# Saves the edits to the server and redirects the user back to the dashboard
-@app.route('/commit_transaction_edits', methods=['POST'])
+# Saves the transaction edits to the server and redirects the user back to the dashboard
+@app.route('/edit_transaction', methods=['POST'])
 def edit_transaction_action():
     db_id = int(request.args.get('id'))
     description = request.form['transaction_description']
@@ -200,6 +173,32 @@ def remove_category_action():
 
     # Transaction not found/ not owned by the user
     flash('There was an error removing the category.')
+
+    return redirect('/')
+
+
+# Saves the category edits to the server and redirects the user back to the dashboard
+@app.route('/edit_category', methods=['POST'])
+def edit_category_action():
+    db_id = int(request.args.get('id'))
+    name = request.form['category_name']
+    value = request.form['transaction_amount']
+
+    succeed = False
+
+    # Sanitize inputs
+    if not stdfn.verify_input_sanitization(name):
+        flash('Invalid category name.')
+        return redirect('/')
+    if not stdfn.verify_input_sanitization(value):
+        flash('Invalid category value.')
+        return redirect('/')
+
+    # Add transaction to database
+    if DbFunctions.edit_cat(db_id, name, value):
+        flash('Category changed.')
+    else:
+        flash('Failed to add category.')
 
     return redirect('/')
 
