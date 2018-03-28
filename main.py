@@ -133,7 +133,7 @@ def edit_transaction_action():
 def add_category_action():
     username = session.get('user_data').get('username')
     name = request.form['category_name']
-    value = request.form['transaction_amount']
+    value = request.form['category_value']
 
     # Sanitize inputs
     if not stdfn.verify_input_sanitization(name):
@@ -182,7 +182,7 @@ def remove_category_action():
 def edit_category_action():
     db_id = int(request.args.get('id'))
     name = request.form['category_name']
-    value = request.form['transaction_amount']
+    value = request.form['category_value']
 
     succeed = False
 
