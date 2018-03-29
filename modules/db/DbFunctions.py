@@ -48,14 +48,14 @@ def get_categories(username, user_table, cat_table):
     cats = []
     query2 = user_table.query(loginDb.User).filter(loginDb.User.username == 'master')
     if query2.count() < 1:
-        add_user('master', 'uncategorized', user_table, cat_table, [['uncategorized','0','']])
+        add_user('master', 'uncategorized', user_table, cat_table, {'uncategorized':'0'})
     query2 = user_table.query(loginDb.User).filter(loginDb.User.username == 'master')
     user_id = query2.first().id
     query2 = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
     for row in query2:
-        cats.append([row.id, row.catName, row.catVal, row.tranList])
+        cats.append([row.id, row.catName, row.catVal])
     for row in query:
-        cats.append([row.id, row.catName, row.catVal, row.tranList])
+        cats.append([row.id, row.catName, row.catVal])
 
     return cats
 
@@ -77,7 +77,7 @@ def add_user(username, password, user_table, cat_table, cats):
     result = query.first()
 
     for cat in cats:
-        new_cata = categoriesDb.Category(result.id, cat[0], cat[1], cat[2])
+        new_cata = categoriesDb.Category(result.id, cat, cats[cat])
         cat_table.add(new_cata)
 
     user_table.commit()
@@ -107,18 +107,16 @@ def remove_user(username, user_table, cat_table, tran_table):
 def remove_cat(catid, cat_table, tran_table):
     query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid)
     cat = query.first()
-    tranlist = list(cat.tranList)
-    for id in tranlist:
-        query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.id == id)
-        for row in query:
-            edit_trans(id, 'uncategorized', row.tranVal, row.tranDesc, row.tranDate, tran_table)
+    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.tranCat == cat.catName)
+    for row in query:
+        edit_trans(row.id, 'uncategorized', row.tranVal, row.tranDesc, row.tranDate, tran_table)
     cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid).delete()
     cat_table.commit()
 
 #Pass the username, catagory name and value, and the user and catagory databases
 #Returns False if the user does not exist or if the Catagory already exists
 #Otherwise creates the new catagory for the user
-def add_cat(username, user_table, catname, catval, tranlist, cat_table):
+def add_cat(username, user_table, catname, catval, cat_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
         return False
@@ -128,7 +126,7 @@ def add_cat(username, user_table, catname, catval, tranlist, cat_table):
     if query.count() > 0:
         return False
 
-    new_cata = categoriesDb.Category(user_id, catname, catval, tranlist)
+    new_cata = categoriesDb.Category(user_id, catname, catval)
     cat_table.add(new_cata)
     cat_table.commit()
     return True
@@ -144,7 +142,7 @@ def edit_cat(catid, catname, catval, tranlist, cat_table):
     cat_table.commit()
     return True
 
-def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_table, catid, cat_table):
+def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_table):
     query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
     if query.count() < 1:
         return False
@@ -152,9 +150,6 @@ def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_t
     new_tran = tranDb.Transaction(user_id, trancat, tranval, trandesc, trandate)
     tran_table.add(new_tran)
     tran_table.commit()
-    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid)
-    cat = query.first()
-    edit_cat(catid, cat.catName, cat.catVal, cat.tranList + str(new_tran.id), cat_table)
     return True
 
 def get_transactions(username, user_table, tran_table):
