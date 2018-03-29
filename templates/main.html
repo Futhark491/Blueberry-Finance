@@ -2,82 +2,88 @@
 {% block content %}
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="flashes">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
+<div class="flashes">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
         {% endif %}
     {% endwith %}
 
-    <div class="main-content">
+<div class="main-content">
 
-        <div class="visualizations">
-            <h3>Insert visualizations here</h3>
+    <div class="visualizations">
+        <h3>Insert visualizations here</h3>
+    </div>
+
+    <div class="sub-window">
+        <h2>Transactions</h2>
+        <div class="column-header">
+            <h3 style="width: 25%">Date</h3>
+            <h3 style="width: 22%">Description</h3>
+            <h3 style="width: 18%">Amount</h3>
+            <h3 style="width: 20%">Category</h3>
         </div>
 
-        <div class="sub-window">
-            <div class="column-header">
-                <h3 style="width: 25%">Date</h3>
-                <h3 style="width: 22%">Description</h3>
-                <h3 style="width: 18%">Amount</h3>
-                <h3 style="width: 20%">Category</h3>
-            </div>
-
-            <form action="/add_transaction" method="POST">
-                <div class="addTransactionHeader">
-                    <div class="date"><input type="date" name="transaction_date" placeholder="Date" style="border-radius: 0"></div>
-                    <div class="descrip"><input type="text" name="transaction_description" placeholder="Description" style="border-radius: 0"></div>
-                    <div class="amount"><input type="text" name="transaction_amount" placeholder="Amount" style="border-radius: 0"></div>
-                    <div class="cat"><select name = "transaction_category" placeholder="Category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
+        <form action="/add_transaction" method="POST">
+            <div class="addTransactionHeader">
+                <div class="date"><input type="date" name="transaction_date" placeholder="Date" style="border-radius: 0"></div>
+                <div class="descrip"><input type="text" name="transaction_description" placeholder="Description" style="border-radius: 0"></div>
+                <div class="amount"><input type="text" name="transaction_amount" placeholder="Amount" style="border-radius: 0"></div>
+                <div class="cat">
+                    <select name="transaction_category" placeholder="Category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
                         {% for category in category_list %}
                         <option value="{{category[1]}}">{{category[1]}}</option>
                         {% endfor %}
-                    </select></div>
-                    <div class="add"><input type="submit" value="Add" class="inline-submit"></div>
+                    </select>
                 </div>
-            </form>
-            <table class="scrollTable">
-                {% if transaction_list > [] %}
-                {% for trans in transaction_list %}
-                <tr class="transaction">
-                    <td>{{trans[4]}}</td>
-                    <td>{{trans[3]}}</td>
-                    <td>{{trans[2]}}</td>
-                    <td>{{trans[1]}}</td>
-                    <td><a href="edit_transaction?id={{ trans[0] }}"><h4>Edit</h4></a></td>
-                    <td><a href="remove_transaction?id={{ trans[0] }}"><h4 style="color:red">Delete</h4></a></td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </table>
-        </div>
-
-        <div class="visualizations">
-                <h3>Insert expected visualizations here</h3>
-        </div>
-
-        <div class = "sub-window">
-            <table class ="scrollTable" >
-                 <form action="/add_category" method="POST">
-                     <tr>
-                         <td><input type="text" name = "category_name" placeholder="Name"></td>
-                         <td><input type ="text" name = "expected_budget" placeholder="Budget"></td>
-                         <td><input type ="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height:auto"></td>
-                     </tr>
-                 </form>
-                {% if category_list > [] %}
-                {% for cat in category_list %}
-                <tr class="transaction">
-                    <td>{{cat[1]}}</td>
-                    <td>{{cat[2]}}</td>
-                    <td><a href="/"><h4>Edit</h4></a></td>
-                    <td><a href="/"><h4 style="color:red">Delete</h4></a></td>
-                </tr>
-                {% endfor %}
-                {% endif %}
-            </table>
-        </div>
+                <div class="add"><input type="submit" value="Add" class="inline-submit"></div>
+            </div>
+        </form>
+        <table class="scrollTable">
+            {% if transaction_list > [] %}
+            {% for trans in transaction_list %}
+            <tr class="transaction">
+                <td style="width: 23%">{{trans[4]}}</td>
+                <td style="width: 27%">{{trans[3]}}</td>
+                <td style="width: 19%">{{trans[2]}}</td>
+                <td style="width: 20%">{{trans[1]}}</td>
+                <!--Edit requires a modal for data before going to "edit_transaction(...)"-->
+                <td style="width: 14%"><a href="edit_transaction?id={{ trans[0] }}"><img src="http://hddfhm.com/images/cartoon-pencil-clipart-17.png" alt="Edit" height="24" width="24"></a></td>
+                <td><a href="remove_transaction?id={{ trans[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
     </div>
-    
+
+    <div class="visualizations">
+        <h3>Insert expected visualizations here</h3>
+    </div>
+
+    <div class="sub-window">
+        <h2>Categories</h2>
+        <table class="scrollTable">
+            <form action="/add_category" method="POST">
+                <tr>
+                    <td style="width: 40%"><input type="text" name="category_name" placeholder="Name"></td>
+                    <td style="width: 40%"><input type="text" name="category_value" placeholder="Budget"></td>
+                    <td style="width: 20%"><input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height:auto"></td>
+                </tr>
+            </form>
+            {% if category_list > [] %}
+            {% for cat in category_list %}
+            <tr class="transaction">
+                <td>{{cat[1]}}</td>
+                <td>{{cat[2]}}</td>
+                <!--Edit requires a modal for data before going to "edit_category(...)"-->
+                <td><a href="/edit_category?id={{ cat[0] }}"><img src="http://hddfhm.com/images/cartoon-pencil-clipart-17.png" alt="Edit" height="24" width="24"></a></td>
+                <td><a href="/remove_category?id={{ cat[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+</div>
+
 {% endblock %}
