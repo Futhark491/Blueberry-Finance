@@ -33,7 +33,7 @@
                 <div class="cat">
                     <select name="transaction_category" placeholder="Category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
                         {% for category in category_list %}
-                        <option value="{{category[1]}}">{{category[1]}}</option>
+                        <option value="{{category[0]}}">{{category[1]}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -47,7 +47,11 @@
                 <td style="width: 23%">{{trans[4]}}</td>
                 <td style="width: 27%">{{trans[3]}}</td>
                 <td style="width: 19%">{{trans[2]}}</td>
-                <td style="width: 20%">{{trans[1]}}</td>
+                {% for category in category_list %}
+                {% if trans[1] | int == category[0] %}
+                <td style="width: 20%">{{category[1]}}</td>
+                {% endif %}
+                {% endfor %}
                 <!--Edit requires a modal for data before going to "edit_transaction(...)"-->
                 <td style="width: 14%"><a href="edit_transaction?id={{ trans[0] }}"><img src="http://hddfhm.com/images/cartoon-pencil-clipart-17.png" alt="Edit" height="24" width="24"></a></td>
                 <td><a href="remove_transaction?id={{ trans[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
