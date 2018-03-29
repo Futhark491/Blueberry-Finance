@@ -13,13 +13,11 @@ class Category(Base):
     userId = Column(Integer, nullable = False)
     catName = Column(String, nullable = False)
     catVal = Column(Integer, nullable = False)
-    tranList = Column(String, nullable = True)
 
-    def __init__(self, user, name, val, tranlist):
+    def __init__(self, user, name, val):
         self.userId = user
         self.catName = name
         self.catVal = val
-        self.tranList = tranlist
 
 
 Base.metadata.create_all(engine)
