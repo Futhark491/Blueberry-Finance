@@ -9,7 +9,9 @@ import modules.standard.stdfn as stdfn
 # Static variables
 APP_HOST = '127.0.0.1'
 APP_PORT = 5000
-DEFAULT_USER_CATEGORIES = [['Food','25',''], ['Car', '50',''], ['Personal', '25','']]
+DEFAULT_USER_CATEGORIES = [['Food', '25', ''],
+                           ['Car', '50', ''],
+                           ['Personal', '25', '']]
 
 # build the flask application
 app = Flask(__name__)
@@ -103,8 +105,9 @@ def remove_transaction_action():
     return redirect('/')
 
 
-# Saves the transaction edits to the server and redirects the user back to the dashboard
-@app.route('/edit_transaction')
+# Saves the transaction edits to the server
+# and redirects the user back to the dashboard
+@app.route('/edit_transaction', methods=['POST'])
 def edit_transaction_action():
     db_id = int(request.args.get('id'))
     description = request.form['transaction_description']
@@ -178,14 +181,13 @@ def remove_category_action():
     return redirect('/')
 
 
-# Saves the category edits to the server and redirects the user back to the dashboard
-@app.route('/edit_category')
+# Saves the category edits to the server
+# and redirects the user back to the dashboard
+@app.route('/edit_category', methods=['POST'])
 def edit_category_action():
     db_id = int(request.args.get('id'))
     name = request.form['category_name']
     value = request.form['category_value']
-
-    succeed = False
 
     # Sanitize inputs
     if not stdfn.verify_input_sanitization(name):
