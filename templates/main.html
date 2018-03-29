@@ -17,6 +17,7 @@
     </div>
 
     <div class="sub-window">
+        <h2>Transactions</h2>
         <div class="column-header">
             <h3 style="width: 25%">Date</h3>
             <h3 style="width: 22%">Description</h3>
@@ -32,7 +33,7 @@
                 <div class="cat">
                     <select name="transaction_category" placeholder="Category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
                         {% for category in category_list %}
-                        <option value="{{category[0]}}">{{category[1]}}</option>
+                        <option value="{{category[1]}}">{{category[1]}}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -61,11 +62,12 @@
     </div>
 
     <div class="sub-window">
+        <h2>Categories</h2>
         <table class="scrollTable">
             <form action="/add_category" method="POST">
                 <tr>
                     <td style="width: 40%"><input type="text" name="category_name" placeholder="Name"></td>
-                    <td style="width: 40%"><input type="text" name="expected_budget" placeholder="Budget"></td>
+                    <td style="width: 40%"><input type="text" name="category_value" placeholder="Budget"></td>
                     <td style="width: 20%"><input type="submit" value="Add" class="btn btn-primary btn-large btn-block" style="height:auto"></td>
                 </tr>
             </form>
