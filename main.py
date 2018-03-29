@@ -104,7 +104,7 @@ def remove_transaction_action():
 
 
 # Saves the transaction edits to the server and redirects the user back to the dashboard
-@app.route('/edit_transaction', methods=['POST'])
+@app.route('/edit_transaction')
 def edit_transaction_action():
     db_id = int(request.args.get('id'))
     description = request.form['transaction_description']
@@ -179,7 +179,7 @@ def remove_category_action():
 
 
 # Saves the category edits to the server and redirects the user back to the dashboard
-@app.route('/edit_category', methods=['POST'])
+@app.route('/edit_category')
 def edit_category_action():
     db_id = int(request.args.get('id'))
     name = request.form['category_name']
