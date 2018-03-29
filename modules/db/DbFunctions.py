@@ -48,7 +48,7 @@ def get_categories(username, user_table, cat_table):
     cats = []
     query2 = user_table.query(loginDb.User).filter(loginDb.User.username == 'master')
     if query2.count() < 1:
-        add_user('master', 'uncategorized', user_table, cat_table, ['uncategorized','0',''])
+        add_user('master', 'uncategorized', user_table, cat_table, [['uncategorized','0','']])
     query2 = user_table.query(loginDb.User).filter(loginDb.User.username == 'master')
     user_id = query2.first().id
     query2 = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
