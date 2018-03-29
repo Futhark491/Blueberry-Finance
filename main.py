@@ -166,7 +166,7 @@ def remove_category_action():
     # Verify that the user owns the transaction and remove it
     category_list = DbFunctions.get_categories(username,
                                                user_table,
-                                               transaction_table)
+                                               category_table)
     for category_data in category_list:
         if (category_data[0] == category_id and
             category_data[1] is not 'Uncategorized'):
