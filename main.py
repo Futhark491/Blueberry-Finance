@@ -171,7 +171,9 @@ def remove_category_action():
         if (category_data[0] == category_id and
             category_data[1] is not 'Uncategorized'):
 
-            DbFunctions.remove_cat(category_id, category_table)
+            DbFunctions.remove_cat(category_id,
+                                   category_table,
+                                   transaction_table)
             flash('Your category was removed.')
             return redirect('/')
 
