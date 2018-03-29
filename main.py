@@ -9,9 +9,9 @@ import modules.standard.stdfn as stdfn
 # Static variables
 APP_HOST = '127.0.0.1'
 APP_PORT = 5000
-DEFAULT_USER_CATEGORIES = [['Food', '25', ''],
-                           ['Car', '50', ''],
-                           ['Personal', '25', '']]
+DEFAULT_USER_CATEGORIES = {'Food': '25',
+                           'Car': '50',
+                           'Personal': '25'}
 
 # build the flask application
 app = Flask(__name__)
@@ -77,8 +77,7 @@ def add_transaction_action():
         DbFunctions.add_trans(username, user_table,
                               category, amount,
                               description, date,
-                              transaction_table,
-                              category, category_table)
+                              transaction_table)
 
     return redirect('/')
 
