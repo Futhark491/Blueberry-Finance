@@ -43,7 +43,7 @@
                 {% if transaction_list > [] %}
                 {% for trans in transaction_list %}
                 <!-- This is where the modal is   -->
-                <div id="Trans-Edit" class="modal">
+                <div id="Transaction-Edit-{{trans[0]}}" class="modal">
     <div class="modal-content">
         <div class="edit-transaction-window">
             <h1 style="margin-top:5px"> Transaction Editor</h1>
@@ -73,7 +73,7 @@
                     <td>{{trans[2]}}</td>
                     <td>{{trans[1]}}</td>
 
-                    <td><button onclick="document.getElementById('Trans-Edit').style.display='block'">Edit</button></td>
+                    <td><button onclick="document.getElementById('Transaction-Edit-{{trans[0]}}').style.display='block'">Edit</button></td>
                     <td><a href="remove_transaction?id={{ trans[0] }}"><h4 style="color:red">Delete</h4></a></td>
                 </tr>
                 {% endfor %}
@@ -96,7 +96,7 @@
                  </form>
                 {% if category_list > [] %}
                 {% for cat in category_list %}
-                <div id= "category_edit" class="modal">
+                <div id= "category-edit-{{cat[0]}}" class="modal">
                 <div class="modal-content">
                     <div class="edit-transaction-window">
                             <h1 style="margin-top:5px">Category Editor</h1>
@@ -113,7 +113,7 @@
                 <tr class="transaction">
                     <td>{{cat[1]}}</td>
                     <td>{{cat[2]}}</td>
-                   <td><button onclick="document.getElementById('category_edit').style.display='block'">Edit</button></td>
+                   <td><button onclick="document.getElementById('category-edit-{{cat[0]}}').style.display='block'">Edit</button></td>
                     <td><a href="/"><h4 style="color:red">Delete</h4></a></td>
                 </tr>
                 {% endfor %}
