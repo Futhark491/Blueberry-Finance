@@ -18,6 +18,8 @@ def verify_input_sanitization(input_string, input_type='none'):
         # username too short / long
         if len(input_string) < 4 or len(input_string) > 16:
             return False
+        elif input_string == 'master':
+            return False
     elif input_type == 'password':
         pass
 

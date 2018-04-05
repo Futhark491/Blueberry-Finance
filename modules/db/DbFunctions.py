@@ -1,30 +1,17 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import modules.db.loginDb as loginDb
-import modules.db.categoriesDb as categoriesDb
-import modules.db.transanctionsDb as tranDb
+import modules.db.masterDb as master
 
-#create the User database
-def load_user():
-    user_engine = create_engine('sqlite:///usertable.db', echo = False)
-    user_session = sessionmaker(bind = user_engine)
-    return(user_session())
+#Loads the database that has the user,category, and ransaction tables
+def load_db():
+    db_engine = create_engine('sqlite:///master.db', echo = False)
+    db_session = sessionmaker(bind = db_engine)
+    return(db_session())
 
-#create the catagory database
-def load_cat():
-    cat_engine = create_engine('sqlite:///cattable.db', echo = False)
-    cat_session = sessionmaker(bind = cat_engine)
-    return(cat_session())
-
-def load_tran():
-    tran_engine = create_engine('sqlite:///trantable.db', echo = False)
-    tran_session = sessionmaker(bind = tran_engine)
-    return (tran_session())
-
-#Pass the username, password and user database to validate the authenticity of the user logging in
+#Pass the username, password and database to validate the authenticity of the user logging in
 #Returns False if fails and True if valid
-def validate_user(user_name, pass_word, user_table):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username == user_name)
+def validate_user(user_name, pass_word, db):
+    query = db.query(master.User).filter(master.User.username == user_name)
     if query.count() < 1:
         return False
 
@@ -34,107 +21,135 @@ def validate_user(user_name, pass_word, user_table):
     else:
         return False
 
-#Pass the username, user database and catagory database
-#Returns false if the user does not exist or if they have no catagories
-#Returns a dictionary of catagories and their values for the user
-def get_categories(username, user_table, cat_table):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
-    if query.count() < 1:
-        return []
-    user_id = query.first().id
-    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id)
-    if query.count() < 1:
-        return []
+#Pass the username and database
+#Returns a list of lists. Sublists are category id, category name, and category value
+def get_categories(username, db):
 
+    query = db.query(master.User).filter(master.User.username == username)
+    user_id = query.first().id
+    query = db.query(master.Category).filter(master.Category.userId == user_id)
     cats = []
+    query2 = db.query(master.User).filter(master.User.username == 'master')
+    if query2.count() < 1:
+        add_user('master', 'uncategorized',{'uncategorized':'0'}, db)
+    query2 = db.query(master.User).filter(master.User.username == 'master')
+    user_id = query2.first().id
+    query2 = db.query(master.Category).filter(master.Category.userId == user_id)
+    for row in query2:
+        cats.append([row.id, row.catName, row.catVal])
     for row in query:
         cats.append([row.id, row.catName, row.catVal])
 
     return cats
 
-
-#Pass the username, password, user and catagories databases, and a dictionary of starting catagories and their values
+#Pass the username, password, a dictionary of starting catagories and their values, and the database
 #Returns False if the user already exists
 #Creates the new user and then creates their default catagories with their userID
-def add_user(username, password, user_table, cat_table, cats):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username.in_([username]))
+def add_user(username, password, cats, db):
+
+    query = db.query(master.User).filter(master.User.username.in_([username]))
     result = query.first()
 
     if result:
         return False
 
-    new_user = loginDb.User(username, password)
-    user_table.add(new_user)
+    new_user = master.User(username, password)
+    db.add(new_user)
 
-    query = user_table.query(loginDb.User).filter(loginDb.User.username.in_([username]))
+    query = db.query(master.User).filter(master.User.username.in_([username]))
     result = query.first()
 
     for cat in cats:
-        new_cata = categoriesDb.Category(result.id, cat, cats[cat])
-        cat_table.add(new_cata)
+        new_cata = master.Category(result.id, cat, cats[cat])
+        db.add(new_cata)
 
-    user_table.commit()
-    cat_table.commit()
+    db.commit()
     return True
 
-#Pass the username and user database
+#Pass the username and database
 #Returns False if the user does not exist
-#Otherwise deletes the user
-def remove_user(username, user_table):
-    user_table.query(loginDb.User).filter(loginDb.User.username == username).delete()
-    user_table.commit()
+#Otherwise deletes the user and all associate categories and transactions
+def remove_user(username, db):
+    query = db.query(master.User).filter(master.User.username == username)
+    if query.count() < 1:
+        return []
+    user_id = query.first().id
+    query = db.query(master.Category).filter(master.Category.userId == user_id)
+    for row in query:
+        remove_cat(row.id, db)
+    query = db.query(master.Transaction).filter(master.Transaction.userId == user_id)
+    for row in query:
+        remove_trans(row.id, db)
+    db.query(master.User).filter(master.User.username == username).delete()
+    db.commit()
 
-#Pass the username, user and catagory databases, and the catagory to be deleted
-#Returns False if the user or their catagory does not exist
-#Otherwise deletes the desired catagory for the user
-def remove_cat(catid, cat_table):
-    cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid).delete()
-    cat_table.commit()
+#Pass the category id and database
+#Otherwise deletes the desired catagory for the user and reassigns all associated transactions to 'uncategorized'
+def remove_cat(catid, db):
+    query = db.query(master.Category).filter(master.Category.id == catid)
+    cat = query.first()
+    query = db.query(master.Transaction).filter(master.Transaction.tranCat == cat.catName)
+    for row in query:
+        edit_trans(row.id, 'uncategorized', row.tranVal, row.tranDesc, row.tranDate, db)
+    db.query(master.Category).filter(master.Category.id == catid).delete()
+    db.commit()
 
-#Pass the username, catagory name and value, and the user and catagory databases
+#Pass the username, catagory name and value, and database
 #Returns False if the user does not exist or if the Catagory already exists
 #Otherwise creates the new catagory for the user
-def add_cat(username, user_table, catname, catval, cat_table):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+def add_cat(username, catname, catval, db):
+    query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
         return False
     user_id = query.first().id
-    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.userId == user_id).\
-        filter(categoriesDb.Category.catName == catname)
+    query = db.query(master.Category).filter(master.Category.userId == user_id).\
+        filter(master.Category.catName == catname)
     if query.count() > 0:
         return False
 
-    new_cata = categoriesDb.Category(user_id, catname, catval)
-    cat_table.add(new_cata)
-    cat_table.commit()
+    new_cata = master.Category(user_id, catname, catval)
+    db.add(new_cata)
+    db.commit()
     return True
 
-def edit_cat(catid, catname, catval, cat_table):
-    query = cat_table.query(categoriesDb.Category).filter(categoriesDb.Category.id == catid)
+#Pass the category id, the new category name and value and the database
+#The name or value do not have to be changed for this to work.
+#Returns false if category does not exist
+#Otherwise updates the desired category with the new values
+def edit_cat(catid, catname, catval, db):
+    query = db.query(master.Category).filter(master.Category.id == catid)
     if query.count() < 1:
         return False
     for row in query:
         row.catName = catname
         row.catVal = catval
-    cat_table.commit()
+    db.commit()
     return True
 
-def add_trans(username, user_table, trancat, tranval, trandesc, trandate, tran_table):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+#Pass the username, category name for the transaction, the value of the transaction,
+#a description of the transaction if so desired, the date of the transaction and the database
+#Returns false if the user does not exist
+#Otherwise adds the new transaction for the user
+def add_trans(username, trancat, tranval, trandesc, trandate, db):
+    query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
         return False
     user_id = query.first().id
-    new_tran = tranDb.Transaction(user_id, trancat, tranval, trandesc, trandate)
-    tran_table.add(new_tran)
-    tran_table.commit()
+    new_tran = master.Transaction(user_id, trancat, tranval, trandesc, trandate)
+    db.add(new_tran)
+    db.commit()
     return True
 
-def get_transactions(username, user_table, tran_table):
-    query = user_table.query(loginDb.User).filter(loginDb.User.username == username)
+#Pass the username and the database
+#Returns and empty list if the user does not exist or there are no transactions
+#Otherwise returns a list of lists
+#A sublist contains the transaction id, category, value, description, and date
+def get_transactions(username, db):
+    query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
         return []
     user_id = query.first().id
-    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.userId == user_id)
+    query = db.query(master.Transaction).filter(master.Transaction.userId == user_id)
     if query.count() < 1:
         return []
 
@@ -144,8 +159,11 @@ def get_transactions(username, user_table, tran_table):
 
     return tran
 
-def edit_trans(tranid, trancat, tranval, trandesc, trandate, tran_table):
-    query = tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.id == tranid)
+#Pass the transaction id, category, value, description, date and the database
+#returns false if the transaction does not exist
+#Otherwise updates the transaction with the given values
+def edit_trans(tranid, trancat, tranval, trandesc, trandate, db):
+    query = db.query(master.Transaction).filter(master.Transaction.id == tranid)
     if query.count() < 1:
         return False
     for row in query:
@@ -153,9 +171,11 @@ def edit_trans(tranid, trancat, tranval, trandesc, trandate, tran_table):
         row.tranVal = tranval
         row.tranDesc = trandesc
         row.tranDate = trandate
-    tran_table.commit()
+    db.commit()
     return True
 
-def remove_trans(tranid, tran_table):
-    tran_table.query(tranDb.Transaction).filter(tranDb.Transaction.id == tranid).delete()
-    tran_table.commit()
+#Pass the transaction id and the database
+#Deletes the transaction if it exists
+def remove_trans(tranid, db):
+    db.query(master.Transaction).filter(master.Transaction.id == tranid).delete()
+    db.commit()

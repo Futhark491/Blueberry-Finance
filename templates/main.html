@@ -33,6 +33,7 @@
                 <div class="amount"><input type="text" name="transaction_amount" placeholder="Amount" style="border-radius: 0"></div>
                 <div class="cat">
                     <select name="transaction_category" placeholder="Category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
+
                         {% for category in category_list %}
                         <option value="{{category[0]}}">{{category[1]}}</option>
                         {% endfor %}
@@ -58,7 +59,7 @@
                 <p>Category: </p>
                 <select name = "transaction_category">
                         {% for category in category_list %}
-                        <option value="{{category[1]}}">{{category[1]}}</option>
+                        <option value="{{category[0]}}">{{category[1]}}</option>
                         {% endfor %}
                 </select>
                 <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
@@ -91,7 +92,6 @@
     <div class="visualizations">
         <h3>Insert expected visualizations here</h3>
     </div>
-
     <div class="sub-window">
         <h2>Categories</h2>
         <table class="scrollTable">
@@ -119,7 +119,6 @@
                                 </form>
                     </div>
                 </div>
-
             <tr class="transaction">
                 <td>{{cat[1]}}</td>
                 <td>{{cat[2]}}</td>
