@@ -17,10 +17,7 @@ DEFAULT_USER_CATEGORIES = {'Food': '25',
 app = Flask(__name__)
 
 # load up the database tables
-user_table = DbFunctions.load_user()
-category_table = DbFunctions.load_cat()
-transaction_table = DbFunctions.load_tran()
-
+master = DbFunctions.load_db()
 
 # Main page
 @app.route('/')
@@ -34,11 +31,9 @@ def home_page():
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
         category_list = DbFunctions.get_categories(username,
-                                                   user_table,
-                                                   category_table)
+                                                    master)
         transaction_list = DbFunctions.get_transactions(username,
-                                                        user_table,
-                                                        transaction_table)
+                                                        master)
 
         # Convert the number to have a cents place regardless of value
         for transaction in transaction_list:
@@ -74,10 +69,9 @@ def add_transaction_action():
     # Sanitize inputs
     if ta.validate_transaction_data(description, amount, date, category):
         # Add transaction to database
-        DbFunctions.add_trans(username, user_table,
-                              category, amount,
+        DbFunctions.add_trans(username, category, amount,
                               description, date,
-                              transaction_table)
+                              master)
 
     return redirect('/')
 
@@ -90,11 +84,10 @@ def remove_transaction_action():
     username = session.get('user_data').get('username')
     # Verify that the user owns the transaction and remove it
     transaction_list = DbFunctions.get_transactions(username,
-                                                    user_table,
-                                                    transaction_table)
+                                                    master)
     for transaction_data in transaction_list:
         if transaction_data[0] == transaction_id:
-            DbFunctions.remove_trans(transaction_id, transaction_table)
+            DbFunctions.remove_trans(transaction_id, master)
             flash('Your transaction was removed.')
             return redirect('/')
 
@@ -120,7 +113,7 @@ def edit_transaction_action():
     if ta.validate_transaction_data(description, amount, date, category):
         db_commit_success = DbFunctions.edit_trans(db_id, category,
                                                    amount, description,
-                                                   date, transaction_table)
+                                                   date, master)
         if db_commit_success:
             succeed = True
             flash('Your transaction has been updated.')
@@ -147,8 +140,8 @@ def add_category_action():
         return redirect('/')
 
     # Add transaction to database
-    if (DbFunctions.add_cat(username, user_table,
-                            name, value, category_table)):
+    if (DbFunctions.add_cat(username,
+                            name, value, master)):
         flash('Category added.')
     else:
         flash('Failed to add category.')
@@ -164,15 +157,13 @@ def remove_category_action():
     username = session.get('user_data').get('username')
     # Verify that the user owns the transaction and remove it
     category_list = DbFunctions.get_categories(username,
-                                               user_table,
-                                               category_table)
+                                               master)
     for category_data in category_list:
         if (category_data[0] == category_id and
             category_data[1] is not 'Uncategorized'):
 
             DbFunctions.remove_cat(category_id,
-                                   category_table,
-                                   transaction_table)
+                                   master)
             flash('Your category was removed.')
             return redirect('/')
 
@@ -199,7 +190,7 @@ def edit_category_action():
         return redirect('/')
 
     # Add transaction to database
-    if DbFunctions.edit_cat(db_id, name, value):
+    if DbFunctions.edit_cat(db_id, name, value, master):
         flash('Category changed.')
     else:
         flash('Failed to add category.')
@@ -213,7 +204,7 @@ def login_action():
     session['logged_in'] = user_acct.validate_login_data(
         request.form['username'],
         request.form['password'],
-        user_table)
+        master)
 
     # Set up the user data as needed
     if session['logged_in']:
@@ -247,7 +238,7 @@ def register_action():
     successful_registration = user_acct.validate_registration_data(
         request.form['username'],
         request.form['password'],
-        user_table, category_table,
+        master,
         DEFAULT_USER_CATEGORIES)
 
     if successful_registration:

@@ -5,7 +5,7 @@ import modules.db.DbFunctions as DbFunctions
 
 # Verify that the username & password are sanitary and is a valid
 # combination saved in the database
-def validate_login_data(username, password, user_table):
+def validate_login_data(username, password, master):
     succeeded = True
 
     # Sanitize inputs
@@ -18,14 +18,14 @@ def validate_login_data(username, password, user_table):
         succeeded = False
 
     # Check username and password combo against DB
-    if succeeded and not DbFunctions.validate_user(username.lower(), password, user_table):
+    if succeeded and not DbFunctions.validate_user(username.lower(), password, master):
         flash('Could not find your account.')
         succeeded = False
 
     return succeeded
 
 
-def validate_registration_data(username, password, user_table, category_table, default_categories):
+def validate_registration_data(username, password, default_categories, master):
     succeeded = True
 
     # Sanitize inputs
@@ -37,7 +37,7 @@ def validate_registration_data(username, password, user_table, category_table, d
         succeeded = False
         
     # Add username and password to the database
-    if succeeded and not DbFunctions.add_user(username.lower(), password, user_table, category_table, default_categories):
+    if succeeded and not DbFunctions.add_user(username.lower(), password, default_categories, master ):
         flash('Username is already in the database.')
         succeeded = False
 
