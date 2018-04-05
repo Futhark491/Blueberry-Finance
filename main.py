@@ -238,8 +238,8 @@ def register_action():
     successful_registration = user_acct.validate_registration_data(
         request.form['username'],
         request.form['password'],
-        master,
-        DEFAULT_USER_CATEGORIES)
+        DEFAULT_USER_CATEGORIES,
+        master)
 
     if successful_registration:
         return redirect('/')
