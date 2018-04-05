@@ -9,10 +9,10 @@ SLU Software Engineering Project: An accounting website for managing a budget.
 
 **Front-end & UX Team:**
 > Kyle Bagwill,
+> Mark Gerken,
 > Thomas Salvi
 
 **Flask Team:**
-> Mark Gerken,
 > Ben Schwabe
 
 **Database Team:**
