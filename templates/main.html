@@ -45,45 +45,45 @@
         <table class="scrollTable">
             {% if transaction_list > [] %}
             {% for trans in transaction_list %}
-<!-- This is where the modal is   -->
+                <!-- This is where the modal is   -->
                 <div id="Transaction-Edit-{{trans[0]}}" class="modal">
-    <div class="modal-content">
-        <div class="edit-transaction-window">
-            <h1 style="margin-top:5px"> Transaction Editor</h1>
-            <div class = "edit-transaction-form">
-                <h2>Add Transaction</h2>
-                    <form action ="/commit_transaction_edits?id={{trans[0]}}" method ="POST">
-                      <p>Description: </p><input type="text" name="transaction_description" value="{{trans[3]}}">
-                <p>Amount: </p><input type="text" name="transaction_amount" value="{{trans[2]}}">
-                <p>Date: </p><input type="date" name="transaction_date" value="{{trans[4]}}">
-                <p>Category: </p>
-                <select name = "transaction_category">
-                        {% for category in category_list %}
-                        <option value="{{category[0]}}">{{category[1]}}</option>
-                        {% endfor %}
-                </select>
-                <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
-                <input type="submit" value="Confirm" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">  
-                    </form>
+                    <div class="modal-content">
+                        <div class="edit-transaction-window">
+                            <h1 style="margin-top:5px"> Transaction Editor</h1>
+                            <div class = "edit-transaction-form">
+                                <h2>Add Transaction</h2>
+                                <form action ="/edit_transaction?id={{trans[0]}}" method ="POST">
+                                    <p>Description: </p><input type="text" name="transaction_description" value="{{trans[3]}}">
+                                    <p>Amount: </p><input type="text" name="transaction_amount" value="{{trans[2]}}">
+                                    <p>Date: </p><input type="date" name="transaction_date" value="{{trans[4]}}">
+                                    <p>Category: </p>
+                                    <select name = "transaction_category">
+                                            {% for category in category_list %}
+                                            <option value="{{category[0]}}">{{category[1]}}</option>
+                                            {% endfor %}
+                                    </select>
+                                    <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
+                                    <input type="submit" value="Confirm" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">  
+                                </form>
 
-        </div>
-    </div>
-  </div>
-  <!-- end of modal -->
-
-            <tr class="transaction">
-                <td style="width: 23%">{{trans[4]}}</td>
-                <td style="width: 27%">{{trans[3]}}</td>
-                <td style="width: 19%">{{trans[2]}}</td>
-                {% for category in category_list %}
-                {% if trans[1] | int == category[0] %}
-                <td style="width: 20%">{{category[1]}}</td>
-                {% endif %}
-                {% endfor %}
-                <!--Edit requires a modal for data before going to "edit_transaction(...)"-->
-                <td><button onclick="document.getElementById('Transaction-Edit-{{trans[0]}}').style.display='block'"><img src= "http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width=20></img></button></td>
-                <td><a href="remove_transaction?id={{ trans[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
-            </tr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end of modal -->
+                <tr class="transaction">
+                    <td style="width: 23%">{{trans[4]}}</td>
+                    <td style="width: 27%">{{trans[3]}}</td>
+                    <td style="width: 19%">{{trans[2]}}</td>
+                    {% for category in category_list %}
+                    {% if trans[1] | int == category[0] %}
+                    <td style="width: 20%">{{category[1]}}</td>
+                    {% endif %}
+                    {% endfor %}
+                    <!--Edit requires a modal for data before going to "edit_transaction(...)"-->
+                    <td><button onclick="document.getElementById('Transaction-Edit-{{trans[0]}}').style.display='block'"><img src= "http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width=20></img></button></td>
+                    <td><a href="remove_transaction?id={{ trans[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
+                </tr>
             {% endfor %}
             {% endif %}
         </table>
@@ -108,26 +108,29 @@
             <div id= "category-edit-{{cat[0]}}" class="modal">
                 <div class="modal-content">
                     <div class="edit-transaction-window">
-                            <h1 style="margin-top:5px">Category Editor</h1>
-                            <div class = "edit-transaction-form">
-                                <h2> Add Category</h2>
-                                <form action="/commit_category_edits?id={{cat[0]}}" method ="POST">
-                                    <p>Budget: </p><input type="text" name="Category_budget" value="{{cat[2]}}">
-                                    <p>Category: </p><input type="text" name="Category_name" value="{{cat[1]}}">
-                                    <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
-                <input type="submit" value="Confirm" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">  
-                                </form>
+                        <h1 style="margin-top:5px">Category Editor</h1>
+                        <div class = "edit-transaction-form">
+                            <h2> Add Category</h2>
+                            <form action="/edit_category?id={{cat[0]}}" method ="POST">
+                                
+                                <p>Category: </p><input type="text" name="category_name" value="{{cat[1]}}">
+                                <p>Budget: </p><input type="text" name="category_value" value="{{cat[2]}}">
+                                <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
+                                <input type="submit" value="Confirm" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">  
+                            </form>
+                        </div>
                     </div>
+                    <tr class="transaction">
+                        <td>{{cat[1]}}</td>
+                        <td>{{cat[2]}}</td>
+                        <!--Edit requires a modal for data before going to "edit_category(...)"-->
+                        {% if not cat[0] == category_list[0][0] %}
+                        <td><button onclick="document.getElementById('category-edit-{{cat[0]}}').style.display='block'"><img src= "http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width=20></img></button></td>
+                        <td><a href="/remove_category?id={{ cat[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
+                        {% endif %}
+                    </tr>
                 </div>
-            <tr class="transaction">
-                <td>{{cat[1]}}</td>
-                <td>{{cat[2]}}</td>
-                <!--Edit requires a modal for data before going to "edit_category(...)"-->
-                {% if not cat[0] == category_list[0][0] %}
-                <td><button onclick="document.getElementById('category-edit-{{cat[0]}}').style.display='block'"><img src= "http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width=20></img></button></td>
-                <td><a href="/remove_category?id={{ cat[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></td>
-                {% endif %}
-            </tr>
+            </div>
             {% endfor %}
             {% endif %}
         </table>
