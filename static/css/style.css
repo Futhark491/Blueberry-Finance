@@ -179,12 +179,12 @@ ul {
     grid-row: auto;
     grid-column-gap: 20px;
     grid-row-gap: 20px;
-    border: 2px dashed green;
     overflow: hidden;
 }
 
 .visualizations {
-    border: 2px solid pink;
+    border-radius: 8px;
+    border-style: solid;
 }
 
 .sub-window {
@@ -193,6 +193,13 @@ ul {
     border-radius: 8px;
     background: white;
     border-style: solid;
+    height: 300px;
+    overflow: hidden;
+}
+
+.scrollTable {
+    overflow-y: scroll;
+    height: 100%;
 }
 
 .column-header {
