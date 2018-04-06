@@ -1,0 +1,64 @@
+/* Add Transaction Formatting Start */
+.tableRow {
+    display: inline-flex;
+    padding: 0;
+    margin: 0;
+    height: 30px;
+    width: 100%;
+}
+
+    .tableRow div {
+        border-radius: 0;
+    }
+    .tableRow .date {
+        width: 25%;
+    }
+
+    .tableRow .descrip {
+        width: 22%;
+    }
+
+    .tableRow .amount {
+        width: 18%;
+    }
+
+    .tableRow .cat {
+        width: 20%;
+        text-align-last: center;
+    }
+
+    .tableRow .add {
+        width: 15%;
+    }
+
+        .tableRow .inline-submit {
+            border: 2px solid transparent;
+            background: #3498DB;
+            color: #ffffff;
+            font-size: 16px;
+            text-decoration: none;
+            text-shadow: none;
+            border-radius: 3px;
+            box-shadow: none;
+            transition: 0.25s;
+            display: block;
+            width: 100%;
+            margin: auto;
+            padding: auto;
+        }
+
+            .tableRow .add .inline-submit:hover {
+                background-color: #2980B9;
+            }
+
+    .tableRow .edit, .tableRow .delete {
+        width: 7.5%;
+    }
+
+    .tableRow .name, .tableRow .budget, .tableRow .cat_add{
+        width: 33%;
+    }
+
+    .tableRow .cat_edit, .tableRow .cat_delete {
+        width: 16.5%;
+    }

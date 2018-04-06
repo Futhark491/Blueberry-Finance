@@ -1,0 +1,28 @@
+.main-content {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row: auto;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    overflow: hidden;
+}
+
+.visualizations {
+    border-radius: 8px;
+    border-style: solid;
+}
+
+.sub-window {
+    margin: auto;
+    width: 100%;
+    border-radius: 8px;
+    background: white;
+    border-style: solid;
+    height: 300px;
+    overflow: hidden;
+}
+
+.transactionList, .categoryList {
+    height: 80%;
+}

@@ -31,7 +31,7 @@ def get_categories(username, db):
     cats = []
     query2 = db.query(master.User).filter(master.User.username == 'master')
     if query2.count() < 1:
-        add_user('master', 'uncategorized',{'uncategorized':'0'}, db)
+        add_user('master', 'Uncategorized',{'Uncategorized':'0'}, db)
     query2 = db.query(master.User).filter(master.User.username == 'master')
     user_id = query2.first().id
     query2 = db.query(master.Category).filter(master.Category.userId == user_id)
@@ -84,13 +84,13 @@ def remove_user(username, db):
     db.commit()
 
 #Pass the category id and database
-#Otherwise deletes the desired catagory for the user and reassigns all associated transactions to 'uncategorized'
+#Otherwise deletes the desired catagory for the user and reassigns all associated transactions to 'Uncategorized'
 def remove_cat(catid, db):
     query = db.query(master.Category).filter(master.Category.id == catid)
     cat = query.first()
     query = db.query(master.Transaction).filter(master.Transaction.tranCat == cat.catName)
     for row in query:
-        edit_trans(row.id, 'uncategorized', row.tranVal, row.tranDesc, row.tranDate, db)
+        edit_trans(row.id, 'Uncategorized', row.tranVal, row.tranDesc, row.tranDate, db)
     db.query(master.Category).filter(master.Category.id == catid).delete()
     db.commit()
 
