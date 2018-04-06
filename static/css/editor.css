@@ -1,8 +1,8 @@
-.edit-transaction-window {
+.edit-window {
     width: 70%;
     margin: auto;
 }
-.edit-transaction-form {
+.edit-form {
     border-radius: 8px;
     border-style: solid;
     margin: 15px auto;
@@ -11,19 +11,19 @@
     width: 70%;
 }
 
-.edit-transaction-form p {
+.edit-form p {
     float: left;
     margin-top: 20px;
     width: 30%;
 }
 
-.edit-transaction-window input {
+.edit-window input {
     width: 60%;
     margin-top: 20px;
     height: 40px;
 }
 
-.edit-transaction-window select {
+.edit-window select {
     width: 60%;
     margin-top: 20px;
     height: 40px;

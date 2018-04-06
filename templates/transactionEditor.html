@@ -3,9 +3,9 @@
     <head>
         <link rel="stylesheet" href={{ url_for('static', filename='css/transactionEditor.css') }} type="text/css">
     </head>
-    <div class="edit-transaction-window">
+    <div class="edit-window">
         <h1 style="margin-top:5px">Transaction Editor</h1>
-        <div class="edit-transaction-form">
+        <div class="edit-form">
             <h2>Add Transaction</h2>
             <form action="/commit_transaction_edits?id={{ transaction_data[0] }}" method="POST">
                 <p>Description: </p><input type="text" name="transaction_description" value="{{ transaction_data[3] }}">

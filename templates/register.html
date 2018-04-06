@@ -1,7 +1,7 @@
 {%  extends "baseLayout.html" %}
 {% block content %}
     <head>
-        <link rel="stylesheet" href={{ url_for('static', filename='css/register.css') }} type="text/css">
+        <link rel="stylesheet" href={{ url_for('static', filename='css/loginRegister.css') }} type="text/css">
     </head>
     {% if session['logged_in'] %}
         <p>You're logged in already!</p>
