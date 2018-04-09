@@ -25,3 +25,19 @@ def verify_input_sanitization(input_string, input_type='none'):
 
     # Input is sanitary
     return True
+
+
+def add_cents(dollar_value_string):
+    # If there is a decimal place already in the number
+    if '.' in dollar_value_string:
+        # If there is only one number after the decimal
+        if dollar_value_string[-2] == '.':
+            # Add a zero to the end
+            dollar_value_string += '0'
+    # If there isn't a decimal in the number already
+    else:
+        # Add placeholders
+        dollar_value_string += '.00'
+
+    # return the modified value
+    return dollar_value_string
