@@ -6,7 +6,7 @@ from flask import flash
 # Validates all data from transactions.
 # Returns False if the data validation failed and True otherwise
 def validate_transaction_data(description, amount, date, category):
-    moneyStringRegex = "-?[0-9]+(\.[0-9][0-9])?"
+    moneyStringRegex = "[0-9]+(\.[0-9][0-9])?"
     dateStringRegex = "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]"
 
     succeeded = True

@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
 import modules.transactions.transactions as ta
+import modules.category.categories as cat
 import modules.standard.stdfn as stdfn
 
 
@@ -19,6 +20,7 @@ app = Flask(__name__)
 # load up the database tables
 master = DbFunctions.load_db()
 
+
 # Main page
 @app.route('/')
 def home_page():
@@ -31,25 +33,29 @@ def home_page():
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
         category_list = DbFunctions.get_categories(username,
-                                                    master)
+                                                   master)
         transaction_list = DbFunctions.get_transactions(username,
                                                         master)
 
-        # Convert the number to have a cents place regardless of value
+        # Create a dictionary for each category that stores the spending for
+        # that category. The key is the category ID and the value is the sum
+        # of all transaction values related to that category.
+        transaction_sum = {}
+        for category in category_list:
+            transaction_sum[category[0]] = 0
+
+        # Convert the number to have a cents place regardless of value after
+        # adding the value to the sum total for the related category.
         for transaction in transaction_list:
-            # Convert number to string
-            transaction_num = str(transaction[2])
-            # If there is a decimal place already in the number
-            if '.' in transaction_num:
-                # If there is only one number after the decimal
-                if transaction_num[-2] == '.':
-                    # Add a zero to the end
-                    transaction_num += '0'
-            # If there isn't a decimal in the number already
-            else:
-                # Add placeholders
-                transaction_num += '.00'
-            transaction[2] = transaction_num
+            transaction_sum[int(transaction[1])] += transaction[2]
+            # Convert number to string and add decimals where necessary
+            transaction[2] = stdfn.add_cents(str(transaction[2]))
+
+        # Convert number to string and add decimals where necessary. Then add
+        # in the transaction where needed
+        for category in category_list:
+            category[2] = stdfn.add_cents(str(category[2]))
+            category.append(stdfn.add_cents(str(transaction_sum[category[0]])))
 
         return render_template('main.html',
                                username=username,
@@ -118,8 +124,8 @@ def edit_transaction_action():
             succeed = True
             flash('Your transaction has been updated.')
 
-    if not succeed:
-        flash('Your transaction could not be updated.')
+        if not succeed:
+            flash('Your transaction could not be updated.')
 
     return redirect('/')
 
@@ -132,19 +138,13 @@ def add_category_action():
     value = request.form['category_value']
 
     # Sanitize inputs
-    if not stdfn.verify_input_sanitization(name):
-        flash('Invalid category name.')
-        return redirect('/')
-    if not stdfn.verify_input_sanitization(value):
-        flash('Invalid category value.')
-        return redirect('/')
-
-    # Add transaction to database
-    if (DbFunctions.add_cat(username,
-                            name, value, master)):
-        flash('Category added.')
-    else:
-        flash('Failed to add category.')
+    if cat.validate_category_data(name, value):
+        # Add transaction to database
+        if (DbFunctions.add_cat(username,
+                                name, value, master)):
+            flash('Category added.')
+        else:
+            flash('Failed to add category.')
 
     return redirect('/')
 
@@ -160,7 +160,7 @@ def remove_category_action():
                                                master)
     for category_data in category_list:
         if (category_data[0] == category_id and
-            category_data[1] is not 'Uncategorized'):
+                category_data[1] is not 'Uncategorized'):
 
             DbFunctions.remove_cat(category_id,
                                    master)
@@ -182,18 +182,12 @@ def edit_category_action():
     value = request.form['category_value']
 
     # Sanitize inputs
-    if not stdfn.verify_input_sanitization(name):
-        flash('Invalid category name.')
-        return redirect('/')
-    if not stdfn.verify_input_sanitization(value):
-        flash('Invalid category value.')
-        return redirect('/')
-
-    # Add transaction to database
-    if DbFunctions.edit_cat(db_id, name, value, master):
-        flash('Category changed.')
-    else:
-        flash('Failed to add category.')
+    if cat.validate_category_data(name, value):
+        # Add transaction to database
+        if DbFunctions.edit_cat(db_id, name, value, master):
+            flash('Category changed.')
+        else:
+            flash('Failed to add category.')
 
     return redirect('/')
 
