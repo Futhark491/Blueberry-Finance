@@ -26,8 +26,18 @@
     <div class="main-content">
 
         <!-- Window #1 / Actual Visualizations -->
-        <div class="visualizations">
-            <h3>Insert visualizations here</h3>
+        <div class="visualizations" id="transaction">
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var jsonData = {{ transaction_chart_json | tojson }};
+                var data = new google.visualization.DataTable(jsonData);
+                var chart = new google.visualization.PieChart(document.getElementById('transaction'));
+                chart.draw(data);
+            }
+            </script>
         </div>
 
         <!-- Window #2 / Transaction list -->
@@ -108,8 +118,18 @@
         </div>
 
         <!-- Window #3 / Expected Visualizations -->
-        <div class="visualizations">
-            <h3>Insert expected visualizations here</h3>
+        <div class="visualizations" id="budget">
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script type="text/javascript">
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var jsonData = {{ budget_chart_json | tojson }};
+                var data = new google.visualization.DataTable(jsonData);
+                var chart = new google.visualization.PieChart(document.getElementById('budget'));
+                chart.draw(data);
+            }
+            </script>
         </div>
 
         <!-- Window #4 / Category Window -->

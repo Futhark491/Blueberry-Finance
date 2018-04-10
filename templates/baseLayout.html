@@ -13,16 +13,25 @@
         <ul>
             <li>
                 {% if session['logged_in'] %}
-                    <h2>Hello {{ username }}!</h2>
+                <h2>Hello {{ username }}!</h2>
                 {% else %}
-                    <h2>Not logged in!</h2>
+                <h2>Not logged in!</h2>
                 {% endif %}
+            </li>
+            <li style="float:unset" id="month">
+                <h2>
+                    <script>
+                        month = new Date().getMonth();
+
+                        document.write(month);
+                    </script>
+                </h2>
             </li>
             <li style="float:right" id="logout">
                 {% if session['logged_in'] %}
-                    <h2><a href="/logout">Log out.</a></h2>
+                <h2><a href="/logout">Log out.</a></h2>
                 {% else %}
-                    <a href="/"><h2>Go back.</h2></a>
+                <a href="/"><h2>Go back.</h2></a>
                 {% endif %}
             </li>
         </ul>
