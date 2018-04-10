@@ -37,14 +37,25 @@ def home_page():
         transaction_list = DbFunctions.get_transactions(username,
                                                         master)
 
-        # Convert the number to have a cents place regardless of value
+        # Create a dictionary for each category that stores the spending for
+        # that category. The key is the category ID and the value is the sum
+        # of all transaction values related to that category.
+        transaction_sum = {}
+        for category in category_list:
+            transaction_sum[category[0]] = 0
+
+        # Convert the number to have a cents place regardless of value after
+        # adding the value to the sum total for the related category.
         for transaction in transaction_list:
+            transaction_sum[int(transaction[1])] += transaction[2]
             # Convert number to string and add decimals where necessary
             transaction[2] = stdfn.add_cents(str(transaction[2]))
 
-            # Convert number to string and add decimals where necessary
+        # Convert number to string and add decimals where necessary. Then add
+        # in the transaction where needed
         for category in category_list:
             category[2] = stdfn.add_cents(str(category[2]))
+            category.append(stdfn.add_cents(str(transaction_sum[category[0]])))
 
         return render_template('main.html',
                                username=username,
