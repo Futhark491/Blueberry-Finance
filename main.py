@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
@@ -24,6 +25,13 @@ master = DbFunctions.load_db()
 # Main page
 @app.route('/')
 def home_page():
+    budget_pie_chart_data = {'cols': [{'label': 'Category', 'type': 'string'},
+                                      {'label': 'Amount', 'type': 'number'}],
+                             'rows': []}
+
+    transaction_pie_chart_data = {'cols': [{'label': 'Category', 'type': 'string'},
+                                      {'label': 'Amount', 'type': 'number'}],
+                             'rows': []}
     # Validate user log in
     if not session.get('logged_in'):
         return render_template('login.html')
@@ -54,13 +62,26 @@ def home_page():
         # Convert number to string and add decimals where necessary. Then add
         # in the transaction where needed
         for category in category_list:
+            # Add the data to the chart
+            budget_pie_chart_data['rows'].append({'c': [{'v': category[1]},
+                                                        {'v': category[2]}
+                                                       ]
+                                                 })
+            transaction_pie_chart_data['rows'].append({'c':[{'v':category[1]},
+                                                            {'v':transaction_sum[category[0]]}
+                                                           ]
+                                                      })
+            # Format the numbers in the table
             category[2] = stdfn.add_cents(str(category[2]))
+            # Format and add the actual spending to the table
             category.append(stdfn.add_cents(str(transaction_sum[category[0]])))
 
         return render_template('main.html',
                                username=username,
                                category_list=category_list,
-                               transaction_list=transaction_list)
+                               transaction_list=transaction_list,
+                               budget_chart_json=json.dumps(budget_pie_chart_data),
+                               transaction_chart_json=json.dumps(transaction_pie_chart_data))
 
 
 # Adds a transaction to the database
