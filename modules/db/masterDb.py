@@ -25,12 +25,10 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    income = Column(Integer, nullable = True)
 
-    def __init__(self, username, password, income):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.income = income
 
 class Transaction(Base):
 

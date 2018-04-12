@@ -31,7 +31,7 @@ def get_categories(username, db):
     cats = []
     query2 = db.query(master.User).filter(master.User.username == 'master')
     if query2.count() < 1:
-        add_user('master', 'Uncategorized','0',{'Uncategorized':'0'}, db)
+        add_user('master', 'Uncategorized',{'Uncategorized':'0'}, db)
     query2 = db.query(master.User).filter(master.User.username == 'master')
     user_id = query2.first().id
     query2 = db.query(master.Category).filter(master.Category.userId == user_id)
@@ -42,10 +42,10 @@ def get_categories(username, db):
 
     return cats
 
-#Pass the username, password, default income, a dictionary of starting catagories and their values, and the database
+#Pass the username, password, a dictionary of starting catagories and their values, and the database
 #Returns False if the user already exists
 #Creates the new user and then creates their default catagories with their userID
-def add_user(username, password, income, cats, db):
+def add_user(username, password, cats, db):
 
     query = db.query(master.User).filter(master.User.username.in_([username]))
     result = query.first()
@@ -53,7 +53,7 @@ def add_user(username, password, income, cats, db):
     if result:
         return False
 
-    new_user = master.User(username, password, income)
+    new_user = master.User(username, password)
     db.add(new_user)
 
     query = db.query(master.User).filter(master.User.username.in_([username]))
@@ -83,30 +83,14 @@ def remove_user(username, db):
     db.query(master.User).filter(master.User.username == username).delete()
     db.commit()
 
-def edit_income(username, income, db):
-    query = db.query(master.User).filter(master.User.username == username)
-    if query.count() < 1:
-        return []
-    for row in query:
-        row.income = income
-    db.commit()
-
-def get_income(username, db):
-    query = db.query(master.User).filter(master.User.username == username)
-    if query.count() < 1:
-        return []
-    return query.first().income
-
 #Pass the category id and database
 #Otherwise deletes the desired catagory for the user and reassigns all associated transactions to 'Uncategorized'
 def remove_cat(catid, db):
     query = db.query(master.Category).filter(master.Category.id == catid)
     cat = query.first()
-    query = db.query(master.Transaction).filter(master.Transaction.tranCat == catid)
-    query2 = db.query(master.Category).filter(master.Category.catName == 'uncategorized')
-    uncatid = query2.first().id
+    query = db.query(master.Transaction).filter(master.Transaction.tranCat == cat.catName)
     for row in query:
-        edit_trans(row.id, uncatid , row.tranVal, row.tranDesc, row.tranDate, db)
+        edit_trans(row.id, 'Uncategorized', row.tranVal, row.tranDesc, row.tranDate, db)
     db.query(master.Category).filter(master.Category.id == catid).delete()
     db.commit()
 
@@ -160,7 +144,7 @@ def add_trans(username, trancat, tranval, trandesc, trandate, db):
 #Returns and empty list if the user does not exist or there are no transactions
 #Otherwise returns a list of lists
 #A sublist contains the transaction id, category, value, description, and date
-def get_transactions(username, month, year, db):
+def get_transactions(username, db):
     query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
         return []
@@ -171,9 +155,7 @@ def get_transactions(username, month, year, db):
 
     tran = []
     for row in query:
-        date = row.tranDate.split('-')
-        if(date[1]==month and date[0] == year):
-            tran.append([row.id, row.tranCat, row.tranVal, row.tranDesc, row.tranDate])
+        tran.append([row.id, row.tranCat, row.tranVal, row.tranDesc, row.tranDate])
 
     return tran
 
