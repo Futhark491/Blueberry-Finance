@@ -11,6 +11,8 @@
 .visualizations {
     border-radius: 8px;
     border-style: solid;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 
 .sub-window {
