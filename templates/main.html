@@ -1,34 +1,34 @@
 {%  extends "baseLayout.html" %}
-{% block content %}
 
-    <!-- Flashes -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="flashes">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    <!-- End Flashes -->
-
-    <!-- Start CSS Style Sheets -->
-    <head>
+{%block head %}
+{{ super() }}
         {#<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">#}
         <link rel="stylesheet" href={{ url_for('static', filename='css/tableRow.css') }} type="text/css">
         <link rel="stylesheet" href={{ url_for('static', filename='css/dashboard.css') }} type="text/css">
         <link rel="stylesheet" href={{ url_for('static', filename='css/editor.css') }} type="text/css">
         <link rel="stylesheet" href={{ url_for('static', filename='css/modal.css') }} type="text/css">
-    </head>
-    <!-- End CSS Style Sheets -->
+{% endblock %}
 
-    <div class="main-content">
+{% block content %}
 
-        <!-- Window #1 / Actual Visualizations -->
-        <div class="visualizations" id="transaction">
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <script type="text/javascript">
+<!-- Flashes -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+<div class="flashes">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+        {% endif %}
+    {% endwith %}
+<!-- End Flashes -->
+
+<div class="main-content">
+
+    <!-- Window #1 / Actual Visualizations -->
+    <div class="visualizations" id="transaction">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
             google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.setOnLoadCallback(drawChart);
             function drawChart() {
@@ -37,90 +37,88 @@
                 var chart = new google.visualization.PieChart(document.getElementById('transaction'));
                 chart.draw(data);
             }
-            </script>
-        </div>
+        </script>
+    </div>
 
-        <!-- Window #2 / Transaction list -->
-        <div class="sub-window">
-            <h2>Transactions</h2>
+    <!-- Window #2 / Transaction list -->
+    <div class="sub-window">
+        <h2>Transactions</h2>
 
-            <!-- Modal Start  -->
-            {% if transaction_list > [] %}
-                {% for trans in transaction_list %}
-                    <div id="Transaction-Edit-{{trans[0]}}" class="modal">
-                        <div class="modal-content">
-                            <div class="edit-window">
-                                <h1 style="margin-top:5px"> Transaction Editor</h1>
-                                <div class = "edit-form">
-                                    <h2>Add Transaction</h2>
-                                    <form action ="/edit_transaction?id={{trans[0]}}" method ="POST">
-                                        <p>Description: </p><input type="text" name="transaction_description" value="{{trans[3]}}">
-                                        <p>Amount: </p><input type="text" name="transaction_amount" value="{{trans[2]}}">
-                                        <p>Date: </p><input type="date" name="transaction_date" value="{{trans[4]}}">
-                                        <p>Category: </p>
-                                        <select name = "transaction_category">
-                                            {% for category in category_list %}
-                                                <option value="{{category[0]}}">{{category[1]}}</option>
-                                            {% endfor %}
-                                        </select>
-                                        <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
-                                        <input type="submit" value="Confirm" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            <!-- Modal End -->
-
-            <!-- Transaction Add Input Start -->
-            <form action="/add_transaction" method="POST">
-                <div class="tableRow">
-                    <div class="date"><input type="date" name="transaction_date" placeholder="Date"></div>
-                    <div class="descrip"><input type="text" name="transaction_description" placeholder="Description"></div>
-                    <div class="amount"><input type="text" name="transaction_amount" placeholder="Amount"></div>
-                    <div class="cat">
-                        <select name="transaction_category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
-                            {% for category in category_list %}
+        <!-- Modal Start  -->
+        {% if transaction_list > [] %}
+        {% for trans in transaction_list %}
+        <div id="Transaction-Edit-{{trans[0]}}" class="modal">
+            <div class="modal-content">
+                <div class="edit-window">
+                    <h1 style="margin-top:5px"> Transaction Editor</h1>
+                    <div class="edit-form">
+                        <h2>Add Transaction</h2>
+                        <form action="/edit_transaction?id={{trans[0]}}" method="POST">
+                            <p>Description: </p><input type="text" name="transaction_description" value="{{trans[3]}}">
+                            <p>Amount: </p><input type="text" name="transaction_amount" value="{{trans[2]}}">
+                            <p>Date: </p><input type="date" name="transaction_date" value="{{trans[4]}}">
+                            <p>Category: </p>
+                            <select name="transaction_category">
+                                {% for category in category_list %}
                                 <option value="{{category[0]}}">{{category[1]}}</option>
-                            {% endfor %}
-                        </select>
+                                {% endfor %}
+                            </select>
+                            <a href="/"><input type="button" value="Cancel" class="btn btn-primary btn-large btn-block cancel" style="height: auto; float: left; width: 40%"></a>
+                            <input type="submit" value="Confirm" class="btn btn-primary btn-large btn-block" style="height: auto; float: right; width: 40%">
+                        </form>
                     </div>
-                    <div class="add"><input type="submit" value="Add" class="inline-submit"></div>
                 </div>
-            </form>
-            <!-- End of Transaction Add Input -->
-
-{#            <div style="padding:3px"></div> <!-- Dummy line to pad input header and first row -->#}
-
-            <!-- Transaction display start -->
-            <div class="transactionList">
-                {% if transaction_list > [] %}
-                    {% for trans in transaction_list %}
-                        <div class="tableRow" style="margin: 2px 0 2px 0">
-                            <div class="date">{{trans[4]}}</div>
-                            <div class="descrip">{{trans[3]}}</div>
-                            <div class="amount">{{trans[2]}}</div>
-                            {% for category in category_list %}
-                                {% if trans[1] | int == category[0] %}
-                                    <div class="cat">{{category[1]}}</div>
-                                {% endif %}
-                            {% endfor %}
-                            <div class="edit"><button onclick="document.getElementById('Transaction-Edit-{{trans[0]}}').style.display='block'"><img src="http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width="20"></button></div>
-                            <div class="delete"><a href="remove_transaction?id={{trans[0]}}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
             </div>
-            <!-- End of Transaction display -->
-
         </div>
+        {% endfor %}
+        {% endif %}
+        <!-- Modal End -->
+        <!-- Transaction Add Input Start -->
+        <form action="/add_transaction" method="POST">
+            <div class="tableRow">
+                <div class="date"><input type="date" name="transaction_date" placeholder="Date"></div>
+                <div class="descrip"><input type="text" name="transaction_description" placeholder="Description"></div>
+                <div class="amount"><input type="text" name="transaction_amount" placeholder="Amount"></div>
+                <div class="cat">
+                    <select name="transaction_category" style="width: 100%; height: 100%; background-color: #ECF0F1; border: none">
+                        {% for category in category_list %}
+                        <option value="{{category[0]}}">{{category[1]}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="add"><input type="submit" value="Add" class="inline-submit"></div>
+            </div>
+        </form>
+        <!-- End of Transaction Add Input -->
+        {#            <div style="padding:3px"></div> <!-- Dummy line to pad input header and first row -->#}
 
-        <!-- Window #3 / Expected Visualizations -->
-        <div class="visualizations" id="budget">
-            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-            <script type="text/javascript">
+        <!-- Transaction display start -->
+        <div class="transactionList">
+            {% if transaction_list > [] %}
+            {% for trans in transaction_list %}
+            <div class="tableRow" style="margin: 2px 0 2px 0">
+                <div class="date">{{trans[4]}}</div>
+                <div class="descrip">{{trans[3]}}</div>
+                <div class="amount">{{trans[2]}}</div>
+                {% for category in category_list %}
+                {% if trans[1] | int == category[0] %}
+                <div class="cat">{{category[1]}}</div>
+                {% endif %}
+                {% endfor %}
+                <div class="edit"><button onclick="document.getElementById('Transaction-Edit-{{trans[0]}}').style.display='block'"><img src="http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width="20"></button></div>
+                <div class="delete"><a href="remove_transaction?id={{trans[0]}}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></div>
+            </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <!-- End of Transaction display -->
+
+    </div>
+
+    <!-- Window #3 / Expected Visualizations -->
+    <div class="visualizations" id="budget">
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
             google.charts.load('current', { 'packages': ['corechart'] });
             google.charts.setOnLoadCallback(drawChart);
             function drawChart() {
@@ -129,64 +127,62 @@
                 var chart = new google.visualization.PieChart(document.getElementById('budget'));
                 chart.draw(data);
             }
-            </script>
-        </div>
+        </script>
+    </div>
 
-        <!-- Window #4 / Category Window -->
-        <div class="sub-window">
-            <h2>Categories</h2>
+    <!-- Window #4 / Category Window -->
+    <div class="sub-window">
+        <h2>Categories</h2>
 
-            <!-- Start of Category Modal -->
-            {% if category_list > [] %}
-                {% for cat in category_list %}
-                    <div id="Category-Edit-{{cat[0]}}" class="modal">
-                        <div class="modal-content">
-                            <div class="edit-window">
-                                <h1 style="margin-top:5px">Category Editor</h1>
-                                <div class = "edit-form">
-                                    <h2> Add Category</h2>
-                                    <form action="/edit_category?id={{cat[0]}}" method ="POST">
+        <!-- Start of Category Modal -->
+        {% if category_list > [] %}
+        {% for cat in category_list %}
+        <div id="Category-Edit-{{cat[0]}}" class="modal">
+            <div class="modal-content">
+                <div class="edit-window">
+                    <h1 style="margin-top:5px">Category Editor</h1>
+                    <div class="edit-form">
+                        <h2> Add Category</h2>
+                        <form action="/edit_category?id={{cat[0]}}" method="POST">
 
-                                        <p>Category: </p><input type="text" name="category_name" value="{{cat[1]}}">
-                                        <p>Budget: </p><input type="text" name="category_value" value="{{cat[2]}}">
-                                        <a href="/"><input type="button" value="Cancel" class="btn cancel" style="height: auto; float: left; width: 40%"></a>
-                                        <input type="submit" value="Confirm" class="btn" style="height: auto; float: right; width: 40%">
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                            <p>Category: </p><input type="text" name="category_name" value="{{cat[1]}}">
+                            <p>Budget: </p><input type="text" name="category_value" value="{{cat[2]}}">
+                            <a href="/"><input type="button" value="Cancel" class="btn cancel" style="height: auto; float: left; width: 40%"></a>
+                            <input type="submit" value="Confirm" class="btn" style="height: auto; float: right; width: 40%">
+                        </form>
                     </div>
-                {% endfor %}
-            {% endif %}
-            <!-- End of Category Modal -->
-
-            <!-- Start of Add Category Input -->
-            <form action="/add_category" method="POST">
-                <div class="tableRow">
-                    <div class="name"><input type="text" name="category_name" placeholder="Name"></div>
-                    <div class="budget"><input type="text" name="category_value" placeholder="Budget"></div>
-                    <div class="cat_add"><input type="submit" value="Add" class="inline-submit"></div>
                 </div>
-            </form>
-            <!-- End of Add Category Input -->
-
-            <!-- Start of Category display -->
-            <div class="categoryList">
-                {% if category_list > [] %}
-                    {% for cat in category_list %}
-                        <div class="tableRow">
-                            <div class="name">{{cat[1]}}</div>
-                            <div class="budget">${{cat[2]}}</div>
-                            {% if not cat[0] == category_list[0][0] %}
-                                <div class="cat_edit"><button onclick="document.getElementById('Category-Edit-{{cat[0]}}').style.display='block'"><img src= "http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width=20></img></button></div>
-                                <div class="cat_delete"><a href="/remove_category?id={{ cat[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></div>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <!-- End of Category Modal -->
+        <!-- Start of Add Category Input -->
+        <form action="/add_category" method="POST">
+            <div class="tableRow">
+                <div class="name"><input type="text" name="category_name" placeholder="Name"></div>
+                <div class="budget"><input type="text" name="category_value" placeholder="Budget"></div>
+                <div class="cat_add"><input type="submit" value="Add" class="inline-submit"></div>
+            </div>
+        </form>
+        <!-- End of Add Category Input -->
+        <!-- Start of Category display -->
+        <div class="categoryList">
+            {% if category_list > [] %}
+            {% for cat in category_list %}
+            <div class="tableRow">
+                <div class="name">{{cat[1]}}</div>
+                <div class="budget">${{cat[2]}}</div>
+                {% if not cat[0] == category_list[0][0] %}
+                <div class="cat_edit"><button onclick="document.getElementById('Category-Edit-{{cat[0]}}').style.display='block'"><img src="http://hddfhm.com/images/cartoon-pencil-clipart-17.png" width=20></img></button></div>
+                <div class="cat_delete"><a href="/remove_category?id={{ cat[0] }}"><img src="https://cdn2.iconfinder.com/data/icons/round-interface-1/217/50-512.png" alt="Delete" height="24" width="24"></a></div>
                 {% endif %}
             </div>
-            <!-- End of Category display -->
-
+            {% endfor %}
+            {% endif %}
         </div>
+        <!-- End of Category display -->
+
     </div>
+</div>
 {% endblock %}

@@ -18,20 +18,50 @@
                 <h2>Not logged in!</h2>
                 {% endif %}
             </li>
-            <li style="float:unset" id="month">
-                <h2>
-                    <script>
-                        month = new Date().getMonth();
-
-                        document.write(month);
-                    </script>
-                </h2>
-            </li>
             <li style="float:right" id="logout">
                 {% if session['logged_in'] %}
                 <h2><a href="/logout">Log out.</a></h2>
                 {% else %}
                 <a href="/"><h2>Go back.</h2></a>
+                {% endif %}
+            </li>
+            <li style="float:none" id="month">
+                {% if session['logged_in'] %}
+                <select id="month">
+                    <option value=''>--Select Month--</option>
+                    <option value='1'>Janaury</option>
+                    <option value='2'>February</option>
+                    <option value='3'>March</option>
+                    <option value='4'>April</option>
+                    <option value='5'>May</option>
+                    <option value='6'>June</option>
+                    <option value='7'>July</option>
+                    <option value='8'>August</option>
+                    <option value='9'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
+                </select>
+                <select id="year">
+                    <option value=''>--Select Year--</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2013">2013</option>
+                    <option value="2012">2012</option>
+                    <option value="2011">2011</option>
+                    <option value="2010">2010</option>
+                </select>
+                <div class="income"><input type="text" name="income" placeholder="--Income--"></div>
+                {% else %}
+                <h2>
+                    <script>
+                        var d = new Date();
+                        document.write(d.toDateString());
+                    </script>
+                </h2>
                 {% endif %}
             </li>
         </ul>
