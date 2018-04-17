@@ -66,10 +66,11 @@ def validate_income(username, income, db):
 
     if not (stdfn.verify_input_sanitization(income) and
             re.fullmatch(moneyStringRegex, income)):
-        flash('Invalid income. Please resubmit')
+        flash('Invalid income. Please resubmit.')
         succeeded = False
 
     if succeeded:
         DbFunctions.edit_income(username, income, db)
+        flash('You income has been updated.')
 
     return succeeded
