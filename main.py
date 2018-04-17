@@ -14,6 +14,7 @@ APP_PORT = 5000
 DEFAULT_USER_CATEGORIES = {'Food': '25',
                            'Car': '50',
                            'Personal': '25'}
+DEFAULT_USER_INCOME = 0
 
 # build the flask application
 app = Flask(__name__)
@@ -25,13 +26,17 @@ master = DbFunctions.load_db()
 # Main page
 @app.route('/')
 def home_page():
-    budget_pie_chart_data = {'cols': [{'label': 'Category', 'type': 'string'},
-                                      {'label': 'Amount', 'type': 'number'}],
+    budget_pie_chart_data = {'cols': [{'label': 'Category',
+                                       'type': 'string'},
+                                      {'label': 'Amount',
+                                       'type': 'number'}],
                              'rows': []}
 
-    transaction_pie_chart_data = {'cols': [{'label': 'Category', 'type': 'string'},
-                                      {'label': 'Amount', 'type': 'number'}],
-                             'rows': []}
+    transaction_pie_chart_data = {'cols': [{'label': 'Category',
+                                            'type': 'string'},
+                                           {'label': 'Amount',
+                                            'type': 'number'}],
+                                  'rows': []}
     # Validate user log in
     if not session.get('logged_in'):
         return render_template('login.html')
@@ -43,6 +48,8 @@ def home_page():
         category_list = DbFunctions.get_categories(username,
                                                    master)
         transaction_list = DbFunctions.get_transactions(username,
+                                                        '04',
+                                                        '2018',
                                                         master)
 
         # Create a dictionary for each category that stores the spending for
@@ -64,13 +71,9 @@ def home_page():
         for category in category_list:
             # Add the data to the chart
             budget_pie_chart_data['rows'].append({'c': [{'v': category[1]},
-                                                        {'v': category[2]}
-                                                       ]
-                                                 })
+                                                        {'v': category[2]}]})
             transaction_pie_chart_data['rows'].append({'c':[{'v':category[1]},
-                                                            {'v':transaction_sum[category[0]]}
-                                                           ]
-                                                      })
+                                                            {'v':transaction_sum[category[0]]}]})
             # Format the numbers in the table
             category[2] = stdfn.add_cents(str(category[2]))
             # Format and add the actual spending to the table
@@ -253,6 +256,7 @@ def register_action():
     successful_registration = user_acct.validate_registration_data(
         request.form['username'],
         request.form['password'],
+        DEFAULT_USER_INCOME,
         DEFAULT_USER_CATEGORIES,
         master)
 

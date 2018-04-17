@@ -18,14 +18,20 @@ def validate_login_data(username, password, master):
         succeeded = False
 
     # Check username and password combo against DB
-    if succeeded and not DbFunctions.validate_user(username.lower(), password, master):
+    if succeeded and not DbFunctions.validate_user(username.lower(),
+                                                   password,
+                                                   master):
         flash('Could not find your account.')
         succeeded = False
 
     return succeeded
 
 
-def validate_registration_data(username, password, default_categories, master):
+def validate_registration_data(username,
+                               password,
+                               income,
+                               default_categories,
+                               master):
     succeeded = True
 
     # Sanitize inputs
@@ -35,13 +41,17 @@ def validate_registration_data(username, password, default_categories, master):
     if not stdfn.verify_input_sanitization(password, 'password'):
         flash('Password must not be empty')
         succeeded = False
-        
+
     # Add username and password to the database
-    if succeeded and not DbFunctions.add_user(username.lower(), password, default_categories, master ):
+    if succeeded and not DbFunctions.add_user(username.lower(),
+                                              password,
+                                              income,
+                                              default_categories,
+                                              master):
         flash('Username is already in the database.')
         succeeded = False
 
     if succeeded:
         flash('Your account was created successfully.')
-    
+
     return succeeded
