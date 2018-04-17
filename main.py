@@ -90,6 +90,7 @@ def home_page():
 
         return render_template('main.html',
                                username=username,
+                               income=DbFunctions.get_income(username, master),
                                category_list=category_list,
                                transaction_list=transaction_list,
                                budget_chart_json=json.dumps(budget_pie_chart_data),
@@ -273,6 +274,15 @@ def register_action():
         return redirect('/')
     else:
         return redirect('/registration')
+
+
+@app.route('/change_income', methods=['POST'])
+def change_income_action():
+    username = session.get('user_data').get('username')
+
+    user_acct.validate_income(username, request.form['income'], master)
+
+    redirect('/')
 
 
 # Run the flask application

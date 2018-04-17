@@ -1,6 +1,7 @@
 from flask import flash
 import modules.standard.stdfn as stdfn
 import modules.db.DbFunctions as DbFunctions
+import re
 
 
 # Verify that the username & password are sanitary and is a valid
@@ -27,11 +28,13 @@ def validate_login_data(username, password, master):
     return succeeded
 
 
+# Verify that the registered account information is valid and sanitary, and
+# send to the database
 def validate_registration_data(username,
                                password,
                                income,
                                default_categories,
-                               master):
+                               db):
     succeeded = True
 
     # Sanitize inputs
@@ -47,11 +50,26 @@ def validate_registration_data(username,
                                               password,
                                               income,
                                               default_categories,
-                                              master):
+                                              db):
         flash('Username is already in the database.')
         succeeded = False
 
     if succeeded:
         flash('Your account was created successfully.')
+
+    return succeeded
+
+
+def validate_income(username, income, db):
+    succeeded = True
+    moneyStringRegex = "[0-9]+(\.[0-9][0-9])?"
+
+    if not (stdfn.verify_input_sanitization(income) and
+            re.fullmatch(moneyStringRegex, income)):
+        flash('Invalid income. Please resubmit')
+        succeeded = False
+
+    if succeeded:
+        DbFunctions.edit_income(username, income, db)
 
     return succeeded
