@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
@@ -43,13 +44,21 @@ def home_page():
     else:
         username = session.get('user_data').get('username')
 
+        view_month = request.args.get('month')
+        view_year = request.args.get('year')
+
+        if(view_month is None):
+            view_month = str(datetime.datetime.today().month).zfill(2)
+        if(view_year is None):
+            view_year = str(datetime.datetime.today().year).zfill(4)
+
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
         category_list = DbFunctions.get_categories(username,
                                                    master)
         transaction_list = DbFunctions.get_transactions(username,
-                                                        '04',
-                                                        '2018',
+                                                        view_month,
+                                                        view_year,
                                                         master)
 
         # Create a dictionary for each category that stores the spending for
