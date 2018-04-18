@@ -1,5 +1,6 @@
 import os
 import json
+import datetime
 from flask import Flask, render_template, request, session, redirect, flash
 import modules.user_acct.user_acct as user_acct
 import modules.db.DbFunctions as DbFunctions
@@ -14,6 +15,7 @@ APP_PORT = 5000
 DEFAULT_USER_CATEGORIES = {'Food': '25',
                            'Car': '50',
                            'Personal': '25'}
+DEFAULT_USER_INCOME = 0
 
 # build the flask application
 app = Flask(__name__)
@@ -25,24 +27,38 @@ master = DbFunctions.load_db()
 # Main page
 @app.route('/')
 def home_page():
-    budget_pie_chart_data = {'cols': [{'label': 'Category', 'type': 'string'},
-                                      {'label': 'Amount', 'type': 'number'}],
+    budget_pie_chart_data = {'cols': [{'label': 'Category',
+                                       'type': 'string'},
+                                      {'label': 'Amount',
+                                       'type': 'number'}],
                              'rows': []}
 
-    transaction_pie_chart_data = {'cols': [{'label': 'Category', 'type': 'string'},
-                                      {'label': 'Amount', 'type': 'number'}],
-                             'rows': []}
+    transaction_pie_chart_data = {'cols': [{'label': 'Category',
+                                            'type': 'string'},
+                                           {'label': 'Amount',
+                                            'type': 'number'}],
+                                  'rows': []}
     # Validate user log in
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
         username = session.get('user_data').get('username')
 
+        view_month = request.args.get('month')
+        view_year = request.args.get('year')
+
+        if(view_month is None):
+            view_month = str(datetime.datetime.today().month).zfill(2)
+        if(view_year is None):
+            view_year = str(datetime.datetime.today().year).zfill(4)
+
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
         category_list = DbFunctions.get_categories(username,
                                                    master)
         transaction_list = DbFunctions.get_transactions(username,
+                                                        view_month,
+                                                        view_year,
                                                         master)
 
         # Create a dictionary for each category that stores the spending for
@@ -64,13 +80,9 @@ def home_page():
         for category in category_list:
             # Add the data to the chart
             budget_pie_chart_data['rows'].append({'c': [{'v': category[1]},
-                                                        {'v': category[2]}
-                                                       ]
-                                                 })
+                                                        {'v': category[2]}]})
             transaction_pie_chart_data['rows'].append({'c':[{'v':category[1]},
-                                                            {'v':transaction_sum[category[0]]}
-                                                           ]
-                                                      })
+                                                            {'v':transaction_sum[category[0]]}]})
             # Format the numbers in the table
             category[2] = stdfn.add_cents(str(category[2]))
             # Format and add the actual spending to the table
@@ -78,6 +90,7 @@ def home_page():
 
         return render_template('main.html',
                                username=username,
+                               income=DbFunctions.get_income(username, master),
                                category_list=category_list,
                                transaction_list=transaction_list,
                                budget_chart_json=json.dumps(budget_pie_chart_data),
@@ -253,6 +266,7 @@ def register_action():
     successful_registration = user_acct.validate_registration_data(
         request.form['username'],
         request.form['password'],
+        DEFAULT_USER_INCOME,
         DEFAULT_USER_CATEGORIES,
         master)
 
@@ -260,6 +274,15 @@ def register_action():
         return redirect('/')
     else:
         return redirect('/registration')
+
+
+@app.route('/change_income', methods=['POST'])
+def change_income_action():
+    username = session.get('user_data').get('username')
+
+    user_acct.validate_income(username, request.form['income'], master)
+
+    redirect('/')
 
 
 # Run the flask application
