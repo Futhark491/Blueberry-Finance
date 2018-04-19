@@ -100,7 +100,7 @@
             <div class="tableRow" style="margin: 2px 0 2px 0">
                 <div class="date">{{trans[4]}}</div>
                 <div class="descrip">{{trans[3]}}</div>
-                <div class="amount">{{trans[2]}}</div>
+                <div class="amount">${{trans[2]}}</div>
                 {% for category in category_list %}
                 {% if trans[1] | int == category[0] %}
                 <div class="cat">{{category[1]}}</div>
