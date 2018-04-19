@@ -88,9 +88,11 @@ def home_page():
             # Format and add the actual spending to the table
             category.append(stdfn.add_cents(str(transaction_sum[category[0]])))
 
+            income_formatted = add_cents(DbFunctions.get_income(username, master))
+
         return render_template('main.html',
                                username=username,
-                               income=DbFunctions.get_income(username, master),
+                               income=income_formatted,
                                category_list=category_list,
                                transaction_list=transaction_list,
                                budget_chart_json=json.dumps(budget_pie_chart_data),
