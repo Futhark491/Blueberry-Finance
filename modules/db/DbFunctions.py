@@ -90,7 +90,6 @@ def edit_income(username, income, db):
     for row in query:
         row.income = income
     db.commit()
-
 def get_income(username, db):
     query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
