@@ -102,7 +102,7 @@ def remove_cat(catid, db):
     query = db.query(master.Category).filter(master.Category.id == catid)
     cat = query.first()
     query = db.query(master.Transaction).filter(master.Transaction.tranCat == catid)
-    query2 = db.query(master.Category).filter(master.Category.catName == 'uncategorized')
+    query2 = db.query(master.Category).filter(master.Category.catName == 'Uncategorized')
     uncatid = query2.first().id
     for row in query:
         edit_trans(row.id, uncatid , row.tranVal, row.tranDesc, row.tranDate, db)
