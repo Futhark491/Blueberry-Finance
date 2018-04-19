@@ -282,7 +282,7 @@ def change_income_action():
 
     user_acct.validate_income(username, request.form['income'], master)
 
-    redirect('/')
+    return redirect('/')
 
 
 # Run the flask application

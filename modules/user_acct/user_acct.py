@@ -71,6 +71,6 @@ def validate_income(username, income, db):
 
     if succeeded:
         DbFunctions.edit_income(username, income, db)
-        flash('You income has been updated.')
+        flash('Your income has been updated.')
 
     return succeeded
