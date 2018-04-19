@@ -54,8 +54,9 @@
                     <option value="2011">2011</option>
                     <option value="2010">2010</option>
                 </select>
-                <form action="/change_income" method="POST">
+                <form action="/change_income" method="POST" style="float:none">
                     <div class="tableRow">
+                        <div style="width: 50%"><h3>Current income: ${{income}}</h3></div>
                         <div class="income"><input type="text" name="income" placeholder="--Income--"></div>
                         <div class="income_add"><input type="submit" value="Add" class="inline-submit"></div>
                     </div>
