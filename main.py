@@ -124,8 +124,19 @@ def add_transaction_action():
 def remove_transaction_action():
     transaction_id = int(request.args.get('id'))
     username = session.get('user_data').get('username')
+    
+    view_month = request.args.get('month')
+    view_year = request.args.get('year')
+
+    if(view_month is None):
+      view_month = str(datetime.datetime.today().month).zfill(2)
+    if(view_year is None):
+      view_year = str(datetime.datetime.today().year).zfill(4)
+
     # Verify that the user owns the transaction and remove it
     transaction_list = DbFunctions.get_transactions(username,
+                                                    view_month,
+                                                    view_year,
                                                     master)
     for transaction_data in transaction_list:
         if transaction_data[0] == transaction_id:
