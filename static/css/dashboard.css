@@ -11,10 +11,15 @@
 .visualizations {
     border-radius: 8px;
     border-style: solid;
+    width :100%
     overflow-y: hidden;
     overflow-x: hidden;
+	
 }
+svg > g > g:last-child {
 
+pointer-events: none
+}
 .sub-window {
     margin: auto;
     width: 100%;
