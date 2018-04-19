@@ -86,16 +86,14 @@ def remove_user(username, db):
 def edit_income(username, income, db):
     query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
-        return False
+        return []
     for row in query:
         row.income = income
     db.commit()
-    return True
-
 def get_income(username, db):
     query = db.query(master.User).filter(master.User.username == username)
     if query.count() < 1:
-        return(-1)
+        return []
     return query.first().income
 
 #Pass the category id and database
