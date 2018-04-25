@@ -52,6 +52,22 @@ def home_page():
         if(view_year is None):
             view_year = str(datetime.datetime.today().year).zfill(4)
 
+        # Calculate previous/next month
+        prev_month = str(int(view_month)-1).zfill(2)
+        next_month = str(int(view_month)+1).zfill(2)
+        if int(prev_month) < 1:
+            prev_month = '12'
+        if int(next_month) > 12:
+            next_month = '01'
+
+        # Calculate previous/next year
+        prev_year = str(int(view_year)-1).zfill(4)
+        next_year = str(int(view_year)+1).zfill(4)
+        if int(prev_year) < 0:
+            prev_year = '9999'
+        if int(next_year) > 9999:
+            next_year = '0000'
+
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
         category_list = DbFunctions.get_categories(username,
@@ -96,7 +112,11 @@ def home_page():
                                category_list=category_list,
                                transaction_list=transaction_list,
                                budget_chart_json=json.dumps(budget_pie_chart_data),
-                               transaction_chart_json=json.dumps(transaction_pie_chart_data))
+                               transaction_chart_json=json.dumps(transaction_pie_chart_data),
+                               date_shift_list=[(view_month, prev_year),
+                                                (prev_month, view_year),
+                                                (next_month, view_year),
+                                                (view_month, next_year)])
 
 
 # Adds a transaction to the database
