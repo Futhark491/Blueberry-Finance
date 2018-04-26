@@ -11,9 +11,11 @@
 .visualizations {
     border-radius: 8px;
     border-style: solid;
-    width :100%
+    overflow:hidden;
     overflow-y: hidden;
     overflow-x: hidden;
+    height: 300px;
+    width 800px;
 	
 }
 svg > g > g:last-child {
