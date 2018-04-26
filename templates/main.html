@@ -26,6 +26,7 @@
 <div class="main-content">
 
     <!-- Window #1 / Actual Visualizations -->
+
     <div class="visualizations" id="transaction">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -34,7 +35,7 @@
             function drawChart() {
                 var jsonData = {{ transaction_chart_json | tojson }};
                 var data = new google.visualization.DataTable(jsonData);
-                var options = {'title':'Actual Spending','width':'100%','height':'300'};
+                var options = {'title':'Actual Spending','width':'800','height':'300'};
                 var chart = new google.visualization.PieChart(document.getElementById('transaction'));
                 chart.draw(data,options);
             }
@@ -115,21 +116,22 @@
         <!-- End of Transaction display -->
     </div>
 
-    <!-- Window #3 / Expected Visualizations -->
-    <div class="visualizations" id="budget">
+
+    <div class="visualizations" id="Budget">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             google.charts.load('current', { 'packages': ['corechart'] });
-            google.charts.setOnLoadCallback(drawChart);
-            function drawChart() {
+            google.charts.setOnLoadCallback(drawCharted);
+            function drawCharted() {
                 var jsonData = {{ budget_chart_json | tojson }};
                 var data = new google.visualization.DataTable(jsonData);
-                var options = {'title':'Projected Spending','width':'100%','height':'300'};
-                var chart = new google.visualization.PieChart(document.getElementById('budget'));
-                chart.draw(data);
+                var options = {'title':'Projected Spending','width':'800','height':'300'};
+                var chart = new google.visualization.PieChart(document.getElementById('Budget'));
+                chart.draw(data,options);
             }
         </script>
     </div>
+    <!-- Window #3 / Expected Visualizations -->
 
     <!-- Window #4 / Category Window -->
     <div class="sub-window">
