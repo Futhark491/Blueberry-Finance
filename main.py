@@ -17,6 +17,9 @@ DEFAULT_USER_CATEGORIES = {'Food': '25',
                            'Personal': '25'}
 DEFAULT_USER_INCOME = 0
 
+MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June',
+              'July', 'August', 'September', 'October', 'November', 'December']
+
 # build the flask application
 app = Flask(__name__)
 
@@ -68,6 +71,9 @@ def home_page():
         if int(next_year) > 9999:
             next_year = '0000'
 
+        # Calculate month text (jan, feb, etc.)
+        display_month = MONTH_LIST[int(view_month) - 1]
+
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
         category_list = DbFunctions.get_categories(username,
@@ -117,7 +123,7 @@ def home_page():
                                                 (prev_month, view_year),
                                                 (next_month, view_year),
                                                 (view_month, next_year)],
-                                view_date=(view_month, view_year))
+                                view_date=(display_month, view_year))
 
 
 # Adds a transaction to the database
