@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    vertical-align: center;
+    height: 80px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3445DB;
+}
+
+.welcome {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    height: 100%;
+}
+
+.welcome a {
+    text-decoration: none;
+    color: white;
+}
+.income-input {
+    margin: auto;
+    border: 2px solid magenta;
+    vertical-align: center;
+    color: white;
+}
+
+
+.logout {
+    float: right;
+}
