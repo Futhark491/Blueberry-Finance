@@ -1,4 +1,4 @@
-.header {
+.titleHeader {
     display: flex;
     vertical-align: center;
     height: 80px;
@@ -19,6 +19,12 @@
 .welcome a {
     text-decoration: none;
     color: white;
+    height: 100%;
+}
+
+.welcome a:hover {
+    background-color: white;
+    color: black;
 }
 .income-input {
     margin: auto;
@@ -30,4 +36,9 @@
 
 .logout {
     float: right;
+}
+
+.logout:hover {
+    background-color: white;
+    color: black;
 }
