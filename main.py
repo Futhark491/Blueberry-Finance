@@ -53,16 +53,16 @@ def home_page():
             view_year = str(datetime.datetime.today().year).zfill(4)
 
         # Calculate previous/next month
-        prev_month = str(int(view_month)-1).zfill(2)
-        next_month = str(int(view_month)+1).zfill(2)
+        prev_month = str(int(view_month) - 1).zfill(2)
+        next_month = str(int(view_month) + 1).zfill(2)
         if int(prev_month) < 1:
             prev_month = '12'
         if int(next_month) > 12:
             next_month = '01'
 
         # Calculate previous/next year
-        prev_year = str(int(view_year)-1).zfill(4)
-        next_year = str(int(view_year)+1).zfill(4)
+        prev_year = str(int(view_year) - 1).zfill(4)
+        next_year = str(int(view_year) + 1).zfill(4)
         if int(prev_year) < 0:
             prev_year = '9999'
         if int(next_year) > 9999:
@@ -116,7 +116,8 @@ def home_page():
                                date_shift_list=[(view_month, prev_year),
                                                 (prev_month, view_year),
                                                 (next_month, view_year),
-                                                (view_month, next_year)])
+                                                (view_month, next_year)],
+                                view_date=(view_month, view_year))
 
 
 # Adds a transaction to the database
