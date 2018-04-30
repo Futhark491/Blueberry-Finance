@@ -34,6 +34,7 @@
     </div>
 
     <!-- Window #1 / Actual Visualizations -->
+
     <div class="visualizations" id="transaction">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
@@ -123,13 +124,13 @@
         <!-- End of Transaction display -->
     </div>
 
-    <!-- Window #3 / Expected Visualizations -->
-    <div class="visualizations" id="budget">
+
+    <div class="visualizations" id="Budget">
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             google.charts.load('current', { 'packages': ['corechart'] });
-            google.charts.setOnLoadCallback(drawChart);
-            function drawChart() {
+            google.charts.setOnLoadCallback(drawCharted);
+            function drawCharted() {
                 var jsonData = {{ budget_chart_json | tojson }};
                 var data = new google.visualization.DataTable(jsonData);
                 var options = {'title':'Projected Spending','width':'825','height':'325'};
@@ -138,6 +139,7 @@
             }
         </script>
     </div>
+    <!-- Window #3 / Expected Visualizations -->
 
     <!-- Window #4 / Category Window -->
     <div class="sub-window">
