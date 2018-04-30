@@ -17,6 +17,9 @@ DEFAULT_USER_CATEGORIES = {'Food': '25',
                            'Personal': '25'}
 DEFAULT_USER_INCOME = 0
 
+MONTH_LIST = ['January', 'February', 'March', 'April', 'May', 'June',
+              'July', 'August', 'September', 'October', 'November', 'December']
+
 # build the flask application
 app = Flask(__name__)
 
@@ -51,6 +54,25 @@ def home_page():
             view_month = str(datetime.datetime.today().month).zfill(2)
         if(view_year is None):
             view_year = str(datetime.datetime.today().year).zfill(4)
+
+        # Calculate previous/next month
+        prev_month = str(int(view_month) - 1).zfill(2)
+        next_month = str(int(view_month) + 1).zfill(2)
+        if int(prev_month) < 1:
+            prev_month = '12'
+        if int(next_month) > 12:
+            next_month = '01'
+
+        # Calculate previous/next year
+        prev_year = str(int(view_year) - 1).zfill(4)
+        next_year = str(int(view_year) + 1).zfill(4)
+        if int(prev_year) < 0:
+            prev_year = '9999'
+        if int(next_year) > 9999:
+            next_year = '0000'
+
+        # Calculate month text (jan, feb, etc.)
+        display_month = MONTH_LIST[int(view_month) - 1]
 
         # Get default categories from the user and add them to the transaction
         # selection list for adding transactions
@@ -96,7 +118,12 @@ def home_page():
                                category_list=category_list,
                                transaction_list=transaction_list,
                                budget_chart_json=json.dumps(budget_pie_chart_data),
-                               transaction_chart_json=json.dumps(transaction_pie_chart_data))
+                               transaction_chart_json=json.dumps(transaction_pie_chart_data),
+                               date_shift_list=[(view_month, prev_year),
+                                                (prev_month, view_year),
+                                                (next_month, view_year),
+                                                (view_month, next_year)],
+                                view_date=(display_month, view_year))
 
 
 # Adds a transaction to the database
@@ -124,8 +151,19 @@ def add_transaction_action():
 def remove_transaction_action():
     transaction_id = int(request.args.get('id'))
     username = session.get('user_data').get('username')
+    
+    view_month = request.args.get('month')
+    view_year = request.args.get('year')
+
+    if(view_month is None):
+      view_month = str(datetime.datetime.today().month).zfill(2)
+    if(view_year is None):
+      view_year = str(datetime.datetime.today().year).zfill(4)
+
     # Verify that the user owns the transaction and remove it
     transaction_list = DbFunctions.get_transactions(username,
+                                                    view_month,
+                                                    view_year,
                                                     master)
     for transaction_data in transaction_list:
         if transaction_data[0] == transaction_id:

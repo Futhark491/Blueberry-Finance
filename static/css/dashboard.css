@@ -11,16 +11,13 @@
 .visualizations {
     border-radius: 8px;
     border-style: solid;
-    overflow: hidden;
-    overflow-y: hidden;
-    overflow-x: hidden;
-    height: 275px;
-    width: 700px;
+    overflow:hidden;
+    height: 300px;
 }
 svg > g > g:last-child {
-
-pointer-events: none
+    pointer-events: none
 }
+
 .sub-window {
     margin: auto;
     width: 100%;
@@ -33,4 +30,13 @@ pointer-events: none
 
 .transactionList, .categoryList { 
     height: 80%;
+}
+
+.date-selector {
+    grid-column-end: span 2;
+    display: inline;
+}
+
+.dateIcons {
+    padding: 0 8px 0 8px;
 }

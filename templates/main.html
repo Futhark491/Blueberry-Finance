@@ -25,6 +25,14 @@
 
 <div class="main-content">
 
+    <div class="date-selector">
+        <a href="/?month={{ date_shift_list[0][0] }}&year={{ date_shift_list[0][1] }}"><img src="static\images\prevYear.png" height="40px" class="dateIcons"></a>
+        <a href="/?month={{ date_shift_list[1][0] }}&year={{ date_shift_list[1][1] }}"><img src="static\images\prevMonth.png" height="40px" class="dateIcons"></a>
+        <h2 style="display: inline; color: black">{{ view_date[0] + " " +  view_date[1] }}</h2>
+        <a href="/?month={{ date_shift_list[2][0] }}&year={{ date_shift_list[2][1] }}"><img src="static\images\nextMonth.png" height="40px" class="dateIcons"></a>
+        <a href="/?month={{ date_shift_list[3][0] }}&year={{ date_shift_list[3][1] }}"><img src="static\images\nextYear.png" height="40px" class="dateIcons"></a>
+    </div>
+
     <!-- Window #1 / Actual Visualizations -->
 
     <div class="visualizations" id="transaction">
@@ -35,7 +43,7 @@
             function drawChart() {
                 var jsonData = {{ transaction_chart_json | tojson }};
                 var data = new google.visualization.DataTable(jsonData);
-                var options = {'title':'Actual Spending','width':'800','height':'300'};
+                var options = {'title':'Actual Spending','width':'825','height':'325'};
                 var chart = new google.visualization.PieChart(document.getElementById('transaction'));
                 chart.draw(data,options);
             }
@@ -101,7 +109,7 @@
             <div class="tableRow" style="margin: 2px 0 2px 0">
                 <div class="date">{{trans[4]}}</div>
                 <div class="descrip">{{trans[3]}}</div>
-                <div class="amount">{{trans[2]}}</div>
+                <div class="amount">${{trans[2]}}</div>
                 {% for category in category_list %}
                 {% if trans[1] | int == category[0] %}
                 <div class="cat">{{category[1]}}</div>
@@ -125,8 +133,8 @@
             function drawCharted() {
                 var jsonData = {{ budget_chart_json | tojson }};
                 var data = new google.visualization.DataTable(jsonData);
-                var options = {'title':'Projected Spending','width':'800','height':'300'};
-                var chart = new google.visualization.PieChart(document.getElementById('Budget'));
+                var options = {'title':'Projected Spending','width':'825','height':'325'};
+                var chart = new google.visualization.PieChart(document.getElementById('budget'));
                 chart.draw(data,options);
             }
         </script>
@@ -147,7 +155,6 @@
                     <div class="edit-form">
                         <h2> Add Category</h2>
                         <form action="/edit_category?id={{cat[0]}}" method="POST">
-
                             <p>Category: </p><input type="text" name="category_name" value="{{cat[1]}}">
                             <p>Budget: </p><input type="text" name="category_value" value="{{cat[2]}}">
                             <a href="/"><input type="button" value="Cancel" class="btn cancel" style="height: auto; float: left; width: 40%"></a>
@@ -161,7 +168,7 @@
         {% endif %}
         <!-- End of Category Modal -->
         <!-- Start of Add Category Input -->
-        <form action="/add_category" method="POST">
+        <form action="/add_category" method="POST" style="padding-bottom: 5px">
             <div class="tableRow">
                 <div class="name"><input type="text" name="category_name" placeholder="Name"></div>
                 <div class="budget"><input type="text" name="category_value" placeholder="Budget"></div>
@@ -172,7 +179,7 @@
         <!-- Start of Category display -->
         <div class="categoryList">
             {% if category_list > [] %}
-            {% for cat in category_list %}
+            {% for cat in category_list[1:] %}
             <div class="tableRow">
                 <div class="name">{{cat[1]}}</div>
                 <div class="budget">${{cat[2]}}</div>
