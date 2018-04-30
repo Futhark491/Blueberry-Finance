@@ -16,29 +16,41 @@
     height: 100%;
 }
 
-.welcome a {
-    text-decoration: none;
-    color: white;
-    height: 100%;
-}
-
-.welcome a:hover {
-    background-color: white;
-    color: black;
-}
 .income-input {
     margin: auto;
-    border: 2px solid magenta;
-    vertical-align: center;
+    width: 70%;
+    height: 90%;
     color: white;
+    padding-top: 15px;
 }
+
+.income {
+    padding-right: 10px;
+}
+
 
 
 .logout {
     float: right;
 }
 
-.logout:hover {
-    background-color: white;
-    color: black;
+.logout a {
+    display: block;
+    height: 100%;
+    color: white;
+    text-decoration: none;
+}
+
+    .logout a:hover {
+        background-color: #34DBCA;
+    }
+    
+.add-btn {
+    width: 120px;
+}
+
+.logout a h2 {
+    display: block;
+    padding: 18px 16px;
+    height: 100%;
 }

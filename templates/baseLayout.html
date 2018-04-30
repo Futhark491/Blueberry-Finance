@@ -23,9 +23,9 @@
             {% if session['logged_in'] %}
             <form action="/change_income" method="POST" style="float:none">
                 <div class="tableRow">
-                    <div style="width: 50%"><h3>Current income: ${{income}}</h3></div>
+                    <div style="width: 50%"><h3 style="padding-right: 1em">Monthly Income: ${{income}}</h3></div>
                     <div class="income"><input type="text" name="income" placeholder="--Income--"></div>
-                    <div class="income_add"><input type="submit" value="Add" class="inline-submit"></div>
+                    <div class="income_add"><input type="submit" value="  Update  " class="inline-submit add-btn"></div>
                 </div>
             </form>
             {% else %}
@@ -38,7 +38,7 @@
             {% endif %}
         </div>
 
-        <div class="welcome logout">
+        <div class="logout">
             {% if session['logged_in'] %}
             <a href="/logout"><h2>Log out.</h2></a>
             {% else %}
