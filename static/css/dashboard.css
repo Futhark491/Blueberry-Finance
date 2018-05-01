@@ -6,6 +6,7 @@
     grid-column-gap: 20px;
     grid-row-gap: 20px;
     overflow: hidden;
+    padding-bottom: 20px;
 }
 
 .visualizations {
@@ -39,4 +40,9 @@ svg > g > g:last-child {
 
 .dateIcons {
     padding: 0 8px 0 8px;
+}
+
+.buffer {
+    grid-column-end: span 2;
+    padding: 20px;
 }
